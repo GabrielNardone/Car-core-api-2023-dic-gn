@@ -16,18 +16,20 @@ export const BookSchema = new EntitySchema<Book>({
     },
     format: {
       name: 'format',
-      type: process.env.NODE_ENV === 'automated_test' ? 'enum' : 'varchar',
+      type: 'simple-enum',
       enum: Format,
       default: Format.DIGITAL,
     },
   },
   relations: {
     author: {
-      type: 'many-to-one',
       target: 'Author',
+      type: 'many-to-one',
       joinColumn: {
-        name: 'author_id',
+        name: 'fk_author_id',
       },
+      inverseSide: 'books',
+      nullable: false,
     },
   },
 });

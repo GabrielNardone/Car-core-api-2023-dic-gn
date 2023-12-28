@@ -1,4 +1,4 @@
-entity: AuthorEntity
+entity: Author
 items:
   author0:
     firstName: 'John'

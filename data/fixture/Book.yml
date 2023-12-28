@@ -1,4 +1,4 @@
-entity: BookEntity
+entity: Book
 items:
   book0:
     title: 'Title one'

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 services:
 
@@ -12,5 +12,5 @@ services:
     ports:
       - '${DB_PORT}:5432'
     volumes:
-      - ./data/pg/:/var/lib/pg
+      - ./data/docker/volumes/pg/:/var/lib/pg
       - ./docker/db/scripts:/docker-entrypoint-initdb.d

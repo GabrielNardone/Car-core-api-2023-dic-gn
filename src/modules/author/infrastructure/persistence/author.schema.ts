@@ -24,18 +24,19 @@ export const AuthorSchema = new EntitySchema<Author>({
     },
     status: {
       name: 'status',
-      type: process.env.NODE_ENV === 'automated_tests' ? 'varchar' : 'enum',
+      type: 'simple-enum',
       enum: Status,
-      default: 'active',
+      default: Status.ACTIVE,
     },
   },
   relations: {
     books: {
-      type: 'one-to-many',
       target: 'Book',
+      type: 'one-to-many',
       joinColumn: {
-        name: 'author_id',
+        name: 'fk_author_id',
       },
+      inverseSide: 'author',
     },
   },
 });
