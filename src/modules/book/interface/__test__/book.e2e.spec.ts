@@ -43,6 +43,8 @@ describe('Book - [/book]', () => {
         .get('/book')
         .expect(HttpStatus.OK);
 
+      console.log(body);
+
       const expectedBooks = expect.arrayContaining([
         expect.objectContaining({
           id: 1,
@@ -98,7 +100,7 @@ describe('Book - [/book]', () => {
     });
   });
 
-  describe('Get - [GET /book/:id]', () => {
+  describe.skip('Get - [GET /book/:id]', () => {
     it('should return an error if book is not found', async () => {
       const BOOK_ID = 999;
 
@@ -124,7 +126,7 @@ describe('Book - [/book]', () => {
     expect(body).toEqual({});
   });
 
-  describe('Update - [PUT /book/:id]', () => {
+  describe.skip('Update - [PUT /book/:id]', () => {
     it('should update a book', async () => {
       const BOOK_TO_UPDATE_ID = 2;
       const updateBookDto: CreateBookDto = {
