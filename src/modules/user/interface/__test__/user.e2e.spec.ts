@@ -44,6 +44,19 @@ describe('User - [/user]', () => {
     };
   };
 
+  const expectedUser = {
+    id: expect.any(Number),
+    createdAt: expect.any(String),
+    updatedAt: expect.any(String),
+    firstName: expect.any(String),
+    lastName: expect.any(String),
+    dob: expect.any(String),
+    email: expect.any(String),
+    address: expect.any(String),
+    country: expect.any(String),
+    role: expect.any(String),
+  };
+
   describe('Get all - [GET /user]', () => {
     it('should return an array of users', async () => {
       const EXPECTED_LENGTH = 2;
@@ -53,28 +66,8 @@ describe('User - [/user]', () => {
         .expect(HttpStatus.OK);
 
       const expectedUsers = expect.arrayContaining([
-        expect.objectContaining({
-          id: 1,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          firstName: 'Mauro',
-          lastName: 'Zangaro',
-          dob: '1991-01-02',
-          email: 'mauro@google.com',
-          address: 'Lugano 345',
-          country: 'Argentina',
-        }),
-        expect.objectContaining({
-          id: 2,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          firstName: 'Hernán',
-          lastName: 'Gatitos',
-          dob: '1990-01-02',
-          email: 'hernan@google.com',
-          address: 'Caseros 345',
-          country: 'Argentina',
-        }),
+        expect.objectContaining({ ...expectedUser, id: 1 }),
+        expect.objectContaining({ ...expectedUser, id: 2 }),
       ]);
 
       expect(body).toEqual(expectedUsers);
@@ -100,19 +93,7 @@ describe('User - [/user]', () => {
         .get(`/user/${USER_ID}`)
         .expect(HttpStatus.OK);
 
-      expect(body).toEqual(
-        expect.objectContaining({
-          id: 1,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          firstName: 'Mauro',
-          lastName: 'Zangaro',
-          dob: '1991-01-02',
-          email: 'mauro@google.com',
-          address: 'Lugano 345',
-          country: 'Argentina',
-        }),
-      );
+      expect(body).toEqual(expect.objectContaining({ ...expectedUser, id: 1 }));
     });
   });
 
@@ -133,15 +114,9 @@ describe('User - [/user]', () => {
         .expect(HttpStatus.CREATED);
 
       const expectedResponse = expect.objectContaining({
+        ...expectedUser,
         id: 3,
-        createdAt: expect.any(String),
-        updatedAt: expect.any(String),
         firstName: 'Matias',
-        lastName: 'Nardone',
-        dob: expect.any(String),
-        email: 'matias@google.com',
-        address: 'Ejército 100',
-        country: 'Argentina',
       });
 
       expect(body).toEqual(expectedResponse);
@@ -187,13 +162,8 @@ describe('User - [/user]', () => {
 
       expect(body).toEqual(
         expect.objectContaining({
+          ...expectedUser,
           id: 1,
-          createdAt: expect.any(String),
-          updatedAt: expect.any(String),
-          firstName: 'Mauro',
-          lastName: 'Zangaro',
-          dob: '1991-01-02',
-          email: 'mauro@google.com',
           address: 'Sidney 425',
           country: 'Australia',
         }),
