@@ -9,7 +9,6 @@ import { AppModule } from '@/app.module';
 
 import { CreateUserDto } from '../../application/dto/create-user.dto';
 import { UpdateUserDto } from '../../application/dto/update-user.dto';
-import { Role } from '../../domain/format.enum';
 
 describe('User - [/user]', () => {
   let app: INestApplication;
