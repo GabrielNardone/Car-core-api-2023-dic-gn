@@ -37,18 +37,13 @@ describe('User - [/user]', () => {
     await app.init();
   });
 
-  const schemaResp = expect.objectContaining({
-    id: expect.any(Number),
-    createdAt: expect.any(String),
-    updatedAt: expect.any(String),
-    firstName: expect.any(String),
-    lastName: expect.any(String),
-    dob: expect.any(String),
-    email: expect.any(String),
-    address: expect.any(String),
-    country: expect.any(String),
-    role: expect.any(Role),
-  });
+  const notFoundResponse = (userId: number) => {
+    return {
+      error: `Not Found`,
+      message: `User with id ${userId} not found`,
+      statusCode: HttpStatus.NOT_FOUND,
+    };
+  };
 
   describe('Get all - [GET /user]', () => {
     it('should return an array of users', async () => {
@@ -89,18 +84,14 @@ describe('User - [/user]', () => {
   });
 
   describe('Get - [GET /user/:id', () => {
-    it('should return not found error', async () => {
+    it('should throw not found error if id doen´t exist', async () => {
       const USER_ID = 999;
 
       const { body } = await request(app.getHttpServer())
         .get(`/user/${USER_ID}`)
         .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual({
-        error: `Not Found`,
-        message: `User with id ${USER_ID} not found`,
-        statusCode: HttpStatus.NOT_FOUND,
-      });
+      expect(body).toEqual(notFoundResponse(USER_ID));
     });
 
     it('should return the specified user', async () => {
@@ -188,10 +179,10 @@ describe('User - [/user]', () => {
     };
 
     it('should update the specified values', async () => {
-      const USER_TO_UPDATE = 1;
+      const USER_ID = 1;
 
       const { body } = await request(app.getHttpServer())
-        .patch(`/user/${USER_TO_UPDATE}`)
+        .patch(`/user/${USER_ID}`)
         .send(updateUserDto)
         .expect(HttpStatus.ACCEPTED);
 
@@ -211,32 +202,27 @@ describe('User - [/user]', () => {
     });
 
     it('should return not found error', async () => {
-      const USER_TO_UPDATE = 999;
+      const USER_ID = 999;
 
       const { body } = await request(app.getHttpServer())
-        .patch(`/user/${USER_TO_UPDATE}`)
+        .patch(`/user/${USER_ID}`)
         .send(updateUserDto)
         .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual({
-        error: `Not Found`,
-        message: `User with id ${USER_TO_UPDATE} not found`,
-        statusCode: HttpStatus.NOT_FOUND,
-      });
+      expect(body).toEqual(notFoundResponse(USER_ID));
     });
   });
 
   describe('Delete - [DELETE /user]', () => {
     it('should delete the specified user', async () => {
       const USER_ID = 1;
+      const RESPONSE = {};
 
       const { body } = await request(app.getHttpServer())
         .delete(`/user/${USER_ID}`)
         .expect(HttpStatus.OK);
 
-      console.log(body);
-
-      expect(body).toEqual({});
+      expect(body).toEqual(RESPONSE);
     });
 
     it('should return not found error', async () => {
@@ -246,13 +232,7 @@ describe('User - [/user]', () => {
         .delete(`/user/${USER_ID}`)
         .expect(HttpStatus.NOT_FOUND);
 
-      console.log(body);
-
-      expect(body).toEqual({
-        error: `Not Found`,
-        message: `User with id ${USER_ID} not found`,
-        statusCode: HttpStatus.NOT_FOUND,
-      });
+      expect(body).toEqual(notFoundResponse(USER_ID));
     });
   });
 

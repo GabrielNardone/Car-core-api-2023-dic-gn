@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { User } from '../../domain/user.domain';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { UserMapper } from '../mapper/user.mapper';
 import {
   IUserRepository,
   USER_REPOSITORY,
@@ -13,10 +14,14 @@ export class UserService {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
+    @Inject(UserMapper)
+    private readonly userMapper: UserMapper,
   ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    return await this.userRepository.create(createUserDto);
+    const user = this.userMapper.fromDtoToEntity(createUserDto);
+
+    return await this.userRepository.create(user);
   }
 
   async findAll(): Promise<User[]> {
@@ -28,10 +33,12 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    return await this.userRepository.update(id, updateUserDto);
+    const user = this.userMapper.fromDtoToEntity(updateUserDto);
+
+    return await this.userRepository.update(id, user);
   }
 
-  async remove(id: number): Promise<true> {
+  async remove(id: number): Promise<number> {
     return await this.userRepository.delete(id);
   }
 }

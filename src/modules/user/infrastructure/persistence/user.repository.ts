@@ -1,13 +1,7 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { CreateUserDto } from '../../application/dto/create-user.dto';
-import { UpdateUserDto } from '../../application/dto/update-user.dto';
-import {
-  badRequestError,
-  notFoundError,
-} from '../../application/exceptions/user.error';
 import { IUserRepository } from '../../application/repository/user.interface.repository';
 import { User } from '../../domain/user.domain';
 import { UserSchema } from './user.schema';
@@ -19,74 +13,44 @@ export class UserRepository implements IUserRepository {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const newUser = this.userRepository.create(createUserDto);
-
-      return await this.userRepository.save(newUser);
-    } catch (error) {
-      console.log(error);
-
-      if (error.code === '23505') {
-        badRequestError(error.detail);
-      }
-
-      throw new InternalServerErrorException(
-        'Can´t create user, check server logs',
-      );
-    }
+  async create(user: User): Promise<User> {
+    return await this.userRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
-    try {
-      return await this.userRepository.find();
-    } catch (error) {
-      console.log(error);
-    }
+    return await this.userRepository.find();
   }
 
   async findById(id: number): Promise<User> {
-    try {
-      const user = await this.userRepository.findOneBy({ id: id });
-      if (!user) notFoundError(id);
-      return user;
-    } catch (error) {
-      console.log(error);
+    const user = await this.userRepository.findOneBy({ id });
 
-      if (error.status === 404) {
-        notFoundError(id);
-      }
-
-      throw new InternalServerErrorException(
-        'Can´t create user, check server logs',
-      );
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
     }
+
+    return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    try {
-      const user = await this.userRepository.preload({
-        id: id,
-        ...updateUserDto,
-      });
+  async update(id: number, user: User): Promise<User> {
+    const updatedUser = await this.userRepository.preload({
+      id: id,
+      ...user,
+    });
 
-      if (!user) notFoundError(id);
-
-      return this.userRepository.save(user);
-    } catch (error) {
-      console.log(error);
-
-      if (error.status === 404) {
-        notFoundError(id);
-      }
+    if (!updatedUser) {
+      throw new NotFoundException(`User with id ${id} not found`);
     }
+
+    return this.userRepository.save(updatedUser);
   }
 
-  async delete(id: number): Promise<true> {
-    const user = await this.findById(id);
+  async delete(id: number): Promise<number> {
+    const { affected } = await this.userRepository.delete(id);
 
-    await this.userRepository.remove(user);
+    if (!affected) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
 
-    return true;
+    return affected;
   }
 }

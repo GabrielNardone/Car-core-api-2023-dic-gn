@@ -9,5 +9,5 @@ export interface IUserRepository {
   findAll(): Promise<User[]>;
   findById(id: number): Promise<User>;
   update(id: number, newUser: UpdateUserDto): Promise<User>;
-  delete(id: number): Promise<true>;
+  delete(id: number): Promise<number>;
 }
