@@ -36,7 +36,7 @@ describe('User - [/user]', () => {
     await app.init();
   });
 
-  const notFoundResponse = (userId: number) => {
+  const handleNotFoundResponse = (userId: number) => {
     return {
       error: `Not Found`,
       message: `User with id ${userId} not found`,
@@ -75,15 +75,15 @@ describe('User - [/user]', () => {
     });
   });
 
-  describe('Get - [GET /user/:id', () => {
-    it('should throw not found error if id doen´t exist', async () => {
+  describe('Get one by id - [GET /user/:id', () => {
+    it('should throw not found error if id doesn´t exist', async () => {
       const USER_ID = 999;
 
       const { body } = await request(app.getHttpServer())
         .get(`/user/${USER_ID}`)
         .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual(notFoundResponse(USER_ID));
+      expect(body).toEqual(handleNotFoundResponse(USER_ID));
     });
 
     it('should return the specified user', async () => {
@@ -122,7 +122,7 @@ describe('User - [/user]', () => {
       expect(body).toEqual(expectedResponse);
     });
 
-    it('should return bad request error', async () => {
+    it('should throw bad request error if the email is missing', async () => {
       const createUserDto = {
         firstName: 'Mauro',
         lastName: 'Zangaro',
@@ -146,13 +146,13 @@ describe('User - [/user]', () => {
     });
   });
 
-  describe('Patch - [PATCH /user/:id]', () => {
+  describe('Update one by id - [PATCH /user/:id]', () => {
     const updateUserDto: UpdateUserDto = {
       address: 'Sidney 425',
       country: 'Australia',
     };
 
-    it('should update the specified values', async () => {
+    it('should update an user with specified values', async () => {
       const USER_ID = 1;
 
       const { body } = await request(app.getHttpServer())
@@ -163,14 +163,13 @@ describe('User - [/user]', () => {
       expect(body).toEqual(
         expect.objectContaining({
           ...expectedUser,
+          ...updateUserDto,
           id: 1,
-          address: 'Sidney 425',
-          country: 'Australia',
         }),
       );
     });
 
-    it('should return not found error', async () => {
+    it('should throw not found error if user does´nt exist', async () => {
       const USER_ID = 999;
 
       const { body } = await request(app.getHttpServer())
@@ -178,30 +177,30 @@ describe('User - [/user]', () => {
         .send(updateUserDto)
         .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual(notFoundResponse(USER_ID));
+      expect(body).toEqual(handleNotFoundResponse(USER_ID));
     });
   });
 
-  describe('Delete - [DELETE /user]', () => {
+  describe('Delete one by id - [DELETE /user/:id]', () => {
     it('should delete the specified user', async () => {
       const USER_ID = 1;
-      const RESPONSE = {};
+      const RESPONSE = 'true';
 
-      const { body } = await request(app.getHttpServer())
+      const { text } = await request(app.getHttpServer())
         .delete(`/user/${USER_ID}`)
         .expect(HttpStatus.OK);
 
-      expect(body).toEqual(RESPONSE);
+      expect(text).toEqual(RESPONSE);
     });
 
-    it('should return not found error', async () => {
+    it('should throw not found error if user does´nt exist', async () => {
       const USER_ID = 999;
 
       const { body } = await request(app.getHttpServer())
         .delete(`/user/${USER_ID}`)
         .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual(notFoundResponse(USER_ID));
+      expect(body).toEqual(handleNotFoundResponse(USER_ID));
     });
   });
 

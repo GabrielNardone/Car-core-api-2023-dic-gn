@@ -33,7 +33,7 @@ export class UserRepository implements IUserRepository {
 
   async update(id: number, user: User): Promise<User> {
     const updatedUser = await this.userRepository.preload({
-      id: id,
+      id,
       ...user,
     });
 
@@ -41,16 +41,16 @@ export class UserRepository implements IUserRepository {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    return this.userRepository.save(updatedUser);
+    return await this.userRepository.save(updatedUser);
   }
 
-  async delete(id: number): Promise<number> {
+  async delete(id: number): Promise<boolean> {
     const { affected } = await this.userRepository.delete(id);
 
     if (!affected) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
-    return affected;
+    return true;
   }
 }
