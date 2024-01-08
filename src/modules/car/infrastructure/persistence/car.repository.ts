@@ -31,10 +31,10 @@ export class CarRepository implements ICarRepository {
     return car;
   }
 
-  async update(id: number, newCar: Car): Promise<Car> {
+  async update(id: number, car: Car): Promise<Car> {
     const updatedCar = await this.carRepository.preload({
       id,
-      ...newCar,
+      ...car,
     });
 
     if (!updatedCar) {

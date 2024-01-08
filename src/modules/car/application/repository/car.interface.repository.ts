@@ -6,6 +6,6 @@ export interface ICarRepository {
   create(car: Car): Promise<Car>;
   findAll(): Promise<Car[]>;
   findById(id: number): Promise<Car>;
-  update(id: number, newCar: Car): Promise<Car>;
+  update(id: number, car: Car): Promise<Car>;
   delete(id: number): Promise<boolean>;
 }
