@@ -11,8 +11,8 @@ import { CommonModule } from '@common/common.module';
 
 import { AuthorModule } from '@/modules/author/author.module';
 import { BookModule } from '@/modules/book/book.module';
-
-import { UserModule } from './modules/user/user.module';
+import { CarModule } from '@/modules/car/car.module';
+import { UserModule } from '@/modules/user/user.module';
 
 @Module({
   imports: [
@@ -34,6 +34,7 @@ import { UserModule } from './modules/user/user.module';
     AuthorModule,
     BookModule,
     UserModule,
+    CarModule,
   ],
   controllers: [],
   providers: [],

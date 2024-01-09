@@ -1,0 +1,17 @@
+entity: Car
+items:
+  car0:
+    brand: 'Chevrolet'
+    model: 'Alfa'
+    color: 'Black'
+    passengers: 6
+    ac: true
+    pricePerDay: 15000 
+
+  car1:
+    brand:  'Ford'
+    model: 'Gamma'
+    color: 'Dark Blue'
+    passengers: 4
+    ac: true
+    pricePerDay: 10000 
