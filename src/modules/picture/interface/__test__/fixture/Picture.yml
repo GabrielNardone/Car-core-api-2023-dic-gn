@@ -1,0 +1,17 @@
+entity: Picture
+items:
+  picture0:
+    car: 1
+    src: 'https://randmon/src/1'
+    description: 'Black car picture'
+    title: 'Black car'
+    type: 'front'
+    date: '2024/08/01' 
+
+  picture1:
+    car: 2
+    src: 'https://randmon/src/2'
+    description: 'Green car picture'
+    title: 'Gren car'
+    type: 'back'
+    date: '2024/08/01'

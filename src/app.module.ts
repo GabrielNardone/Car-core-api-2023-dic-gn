@@ -14,6 +14,8 @@ import { BookModule } from '@/modules/book/book.module';
 import { CarModule } from '@/modules/car/car.module';
 import { UserModule } from '@/modules/user/user.module';
 
+import { PictureModule } from './modules/picture/picture.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +37,7 @@ import { UserModule } from '@/modules/user/user.module';
     BookModule,
     UserModule,
     CarModule,
+    PictureModule,
   ],
   controllers: [],
   providers: [],

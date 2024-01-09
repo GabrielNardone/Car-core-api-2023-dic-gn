@@ -18,7 +18,7 @@ export class CarRepository implements ICarRepository {
   }
 
   async findAll(): Promise<Car[]> {
-    return await this.carRepository.find();
+    return await this.carRepository.find({ relations: { images: true } });
   }
 
   async findById(id: number): Promise<Car> {
