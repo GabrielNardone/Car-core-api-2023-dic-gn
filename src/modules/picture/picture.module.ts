@@ -16,6 +16,7 @@ import { PictureController } from './interface/picture.controller';
     TypeOrmModule.forFeature([PictureSchema]),
     forwardRef(() => CarModule),
     CommonModule,
+    CarModule,
   ],
 
   controllers: [PictureController],

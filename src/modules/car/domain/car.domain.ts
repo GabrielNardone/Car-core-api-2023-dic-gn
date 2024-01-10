@@ -8,5 +8,5 @@ export class Car extends Base {
   passengers: number;
   ac: boolean;
   pricePerDay: number;
-  images: Picture[];
+  images?: Picture[];
 }

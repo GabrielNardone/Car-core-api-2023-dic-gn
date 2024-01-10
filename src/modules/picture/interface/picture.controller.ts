@@ -3,11 +3,9 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   HttpStatus,
   Param,
   ParseFilePipeBuilder,
-  Patch,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -15,7 +13,6 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { CreatePictureDto } from '../application/dto/create-picture.dto';
-import { UpdatePictureDto } from '../application/dto/update-picture.dto';
 import { PictureService } from '../application/service/picture.service';
 import { Picture } from '../domain/picture.domain';
 

@@ -1,16 +1,12 @@
 import {
-  IsArray,
   IsBoolean,
   IsNumber,
-  IsOptional,
   IsPositive,
   IsString,
   Length,
   Max,
   Min,
 } from 'class-validator';
-
-import { Picture } from '@/modules/picture/domain/picture.domain';
 
 export class CreateCarDto {
   @IsString()
@@ -36,8 +32,4 @@ export class CreateCarDto {
   @IsNumber()
   @IsPositive()
   pricePerDay: number;
-
-  @IsOptional()
-  @IsArray()
-  images?: Picture[];
 }

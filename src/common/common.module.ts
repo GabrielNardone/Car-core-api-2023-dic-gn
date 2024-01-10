@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 
-import { FILE_UPLOAD_SERVICE } from './application/repository/file-upload.interface.repository.ts';
+import { FILE_UPLOAD_SERVICE } from './application/repository/file-upload.interface.repository';
 import { S3Service } from './infrastructure/s3/s3.service';
 
 @Module({

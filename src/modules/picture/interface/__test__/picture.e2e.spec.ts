@@ -8,7 +8,6 @@ import { loadFixtures } from '@data/util/loader';
 import { AppModule } from '@/app.module';
 
 import { CreatePictureDto } from '../../application/dto/create-picture.dto';
-import { UpdatePictureDto } from '../../application/dto/update-picture.dto';
 import { CarPicture } from '../../domain/car-picture.enum';
 
 describe('Picture - [/picture]', () => {
@@ -56,24 +55,6 @@ describe('Picture - [/picture]', () => {
     type: expect.any(String),
     date: expect.any(String),
   };
-
-  describe('Get all - [GET /picture]', () => {
-    it('should return an array of pictures', async () => {
-      const EXPECTED_LENGTH = 2;
-
-      const { body } = await request(app.getHttpServer())
-        .get('/picture')
-        .expect(HttpStatus.OK);
-
-      const expectedPictures = expect.arrayContaining([
-        expect.objectContaining({ ...expectedPicture, id: 1 }),
-        expect.objectContaining({ ...expectedPicture, id: 2 }),
-      ]);
-
-      expect(body).toEqual(expectedPictures);
-      expect(body).toHaveLength(EXPECTED_LENGTH);
-    });
-  });
 
   describe.skip('Get one by id - [GET /picture/:id', () => {
     it('should throw not found error if id doesn´t exist', async () => {
@@ -141,41 +122,6 @@ describe('Picture - [/picture]', () => {
       });
 
       expect(body).toEqual(expectedResponse);
-    });
-  });
-
-  describe.skip('Update one by id - [PATCH /picture/:id]', () => {
-    const updatePictureDto: UpdatePictureDto = {
-      type: CarPicture.SIDE,
-      description: 'Left side photo',
-    };
-
-    it('should update a picture with specified values', async () => {
-      const PICTURE_ID = 1;
-
-      const { body } = await request(app.getHttpServer())
-        .patch(`/picture/${PICTURE_ID}`)
-        .send(updatePictureDto)
-        .expect(HttpStatus.ACCEPTED);
-
-      expect(body).toEqual(
-        expect.objectContaining({
-          ...expectedPicture,
-          ...updatePictureDto,
-          id: 1,
-        }),
-      );
-    });
-
-    it('should throw not found error if picture does´nt exist', async () => {
-      const PICTURE_ID = 999;
-
-      const { body } = await request(app.getHttpServer())
-        .patch(`/picture/${PICTURE_ID}`)
-        .send(updatePictureDto)
-        .expect(HttpStatus.NOT_FOUND);
-
-      expect(body).toEqual(handleNotFoundResponse(PICTURE_ID));
     });
   });
 
