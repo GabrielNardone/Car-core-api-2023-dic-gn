@@ -6,9 +6,13 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseFilePipeBuilder,
   Patch,
   Post,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 import { CreatePictureDto } from '../application/dto/create-picture.dto';
 import { UpdatePictureDto } from '../application/dto/update-picture.dto';
@@ -19,28 +23,33 @@ import { Picture } from '../domain/picture.domain';
 export class PictureController {
   constructor(private readonly pictureService: PictureService) {}
 
-  @Post()
-  create(@Body() createPictureDto: CreatePictureDto): Promise<Picture> {
-    return this.pictureService.create(createPictureDto);
-  }
+  @Post('car/:id')
+  @UseInterceptors(FilesInterceptor('files'))
+  create(
+    @Param('id') id: number,
 
-  @Get()
-  findAll(): Promise<Picture[]> {
-    return this.pictureService.findAll();
+    @Body() createPictureDto: CreatePictureDto,
+
+    @UploadedFiles(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: new RegExp(/\.(jpg|jpeg|png)$/i),
+        })
+        .addMaxSizeValidator({
+          maxSize: 1000,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    files: Array<Express.Multer.File>,
+  ): Promise<Picture> {
+    return this.pictureService.create(createPictureDto, files[0].buffer, id);
   }
 
   @Get(':id')
   findOne(@Param('id') id: number): Promise<Picture> {
     return this.pictureService.findOne(id);
-  }
-
-  @HttpCode(HttpStatus.ACCEPTED)
-  @Patch(':id')
-  update(
-    @Param('id') id: number,
-    @Body() updatePictureDto: UpdatePictureDto,
-  ): Promise<Picture> {
-    return this.pictureService.update(id, updatePictureDto);
   }
 
   @Delete(':id')

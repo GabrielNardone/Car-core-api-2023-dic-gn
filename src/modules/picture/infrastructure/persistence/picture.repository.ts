@@ -17,10 +17,6 @@ export class PictureRepository implements IPictureRepository {
     return await this.pictureRepository.save(picture);
   }
 
-  async findAll(): Promise<Picture[]> {
-    return await this.pictureRepository.find();
-  }
-
   async findById(id: number): Promise<Picture> {
     const picture = await this.pictureRepository.findOneBy({ id });
 
@@ -29,19 +25,6 @@ export class PictureRepository implements IPictureRepository {
     }
 
     return picture;
-  }
-
-  async update(id: number, picture: Picture): Promise<Picture> {
-    const updatedPicture = await this.pictureRepository.preload({
-      id,
-      ...picture,
-    });
-
-    if (!updatedPicture) {
-      throw new NotFoundException(`Picture with id ${id} not found`);
-    }
-
-    return await this.pictureRepository.save(updatedPicture);
   }
 
   async delete(id: number): Promise<boolean> {

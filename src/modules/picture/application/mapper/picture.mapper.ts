@@ -6,10 +6,13 @@ import { UpdatePictureDto } from '../dto/update-picture.dto';
 
 @Injectable()
 export class PictureMapper {
-  public fromDtoToEntity(pictureDto: CreatePictureDto | UpdatePictureDto) {
+  public fromDtoToEntity(
+    pictureDto: CreatePictureDto | UpdatePictureDto,
+    objectPath: string,
+  ) {
     const newPicture = new Picture();
     newPicture.title = pictureDto.title;
-    newPicture.src = pictureDto.src;
+    newPicture.src = objectPath;
     newPicture.type = pictureDto.type;
     newPicture.date = pictureDto.date;
     newPicture.description = pictureDto.description;

@@ -1,8 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+
+import {
+  FILE_UPLOAD_SERVICE,
+  IFileUploadService,
+} from '@/common/application/repository/file-upload.interface.repository';
+import {
+  CAR_REPOSITORY,
+  ICarRepository,
+} from '@/modules/car/application/repository/car.interface.repository';
 
 import { Picture } from '../../domain/picture.domain';
 import { CreatePictureDto } from '../dto/create-picture.dto';
-import { UpdatePictureDto } from '../dto/update-picture.dto';
 import { PictureMapper } from '../mapper/picture.mapper';
 import {
   IPictureRepository,
@@ -16,29 +24,40 @@ export class PictureService {
     private readonly pictureRepository: IPictureRepository,
     @Inject(PictureMapper)
     private readonly pictureMapper: PictureMapper,
+    @Inject(FILE_UPLOAD_SERVICE)
+    private readonly fileUploadService: IFileUploadService,
+    @Inject(CAR_REPOSITORY)
+    private readonly carRepository: ICarRepository,
   ) {}
 
-  async create(createPictureDto: CreatePictureDto): Promise<Picture> {
-    const picture = this.pictureMapper.fromDtoToEntity(createPictureDto);
+  async create(
+    createPictureDto: CreatePictureDto,
+    file: Buffer,
+    id: number,
+  ): Promise<Picture> {
+    try {
+      const objectPath = await this.fileUploadService.uploadFiles(file);
+      const car = await this.carRepository.findById(id);
 
-    return await this.pictureRepository.create(picture);
-  }
+      if (!car) {
+        throw new NotFoundException(`Car with id ${id} does´nt exist`);
+      }
 
-  async findAll(): Promise<Picture[]> {
-    return await this.pictureRepository.findAll();
+      const picture = this.pictureMapper.fromDtoToEntity(
+        createPictureDto,
+        objectPath,
+      );
+      picture.car = car;
+
+      return await this.pictureRepository.create(picture);
+    } catch (error) {
+      console.error('Error creating picture:', error);
+      throw error;
+    }
   }
 
   async findOne(id: number): Promise<Picture> {
     return await this.pictureRepository.findById(id);
-  }
-
-  async update(
-    id: number,
-    updatePictureDto: UpdatePictureDto,
-  ): Promise<Picture> {
-    const picture = this.pictureMapper.fromDtoToEntity(updatePictureDto);
-
-    return await this.pictureRepository.update(id, picture);
   }
 
   async remove(id: number): Promise<boolean> {
