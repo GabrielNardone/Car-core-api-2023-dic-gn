@@ -1,0 +1,17 @@
+entity: Rent
+items:
+  rent0:
+    pricePerDay: 5000
+    aceptedDate: '2024/01/11'
+    startingDate: '2024/01/11'
+    dueDate: '2024/02/11'
+    endDate: '2024/02/11' 
+    rejected: false
+
+  rent1:
+    pricePerDay: 7000
+    aceptedDate: '2024/02/11'
+    startingDate: '2024/02/11'
+    dueDate: '2024/03/11'
+    endDate: '2024/03/11' 
+    rejected: true
