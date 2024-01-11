@@ -36,6 +36,7 @@ export const PictureSchema = new EntitySchema<Picture>({
         name: 'fk_car_id',
       },
       inverseSide: 'images',
+      onDelete: 'CASCADE',
     },
   },
 });

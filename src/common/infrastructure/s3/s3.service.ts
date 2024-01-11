@@ -19,8 +19,8 @@ export class S3Service implements IFileUploadService {
       }),
     );
 
-    const objectPath = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileKey}`;
+    const filePath = `https://${process.env.AWS_S3_BUCKET}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/${fileKey}`;
 
-    return objectPath;
+    return filePath;
   }
 }

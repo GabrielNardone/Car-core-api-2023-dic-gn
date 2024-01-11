@@ -7,10 +7,10 @@ import {
   Param,
   ParseFilePipeBuilder,
   Post,
-  UploadedFiles,
+  UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 import { CreatePictureDto } from '../application/dto/create-picture.dto';
 import { PictureService } from '../application/service/picture.service';
@@ -21,13 +21,13 @@ export class PictureController {
   constructor(private readonly pictureService: PictureService) {}
 
   @Post('car/:id')
-  @UseInterceptors(FilesInterceptor('files'))
+  @UseInterceptors(FileInterceptor('file'))
   create(
     @Param('id') id: number,
 
     @Body() createPictureDto: CreatePictureDto,
 
-    @UploadedFiles(
+    @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
           fileType: new RegExp(/\.(jpg|jpeg|png)$/i),
@@ -39,9 +39,9 @@ export class PictureController {
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
         }),
     )
-    files: Array<Express.Multer.File>,
+    file: Express.Multer.File,
   ): Promise<Picture> {
-    return this.pictureService.create(createPictureDto, files[0].buffer, id);
+    return this.pictureService.create(createPictureDto, file.buffer, id);
   }
 
   @Get(':id')
