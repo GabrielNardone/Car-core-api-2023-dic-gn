@@ -36,7 +36,7 @@ export class PictureService {
     id: number,
   ): Promise<Picture> {
     try {
-      const objectPath = await this.fileUploadService.uploadFiles(file);
+      const filePath = await this.fileUploadService.uploadFiles(file);
       const car = await this.carRepository.findById(id);
 
       if (!car) {
@@ -45,7 +45,7 @@ export class PictureService {
 
       const picture = this.pictureMapper.fromDtoToEntity(
         createPictureDto,
-        objectPath,
+        filePath,
       );
       picture.car = car;
 

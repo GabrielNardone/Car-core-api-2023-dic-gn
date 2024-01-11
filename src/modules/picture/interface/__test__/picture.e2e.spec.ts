@@ -6,9 +6,13 @@ import * as request from 'supertest';
 import { loadFixtures } from '@data/util/loader';
 
 import { AppModule } from '@/app.module';
+import { FILE_UPLOAD_SERVICE } from '@/common/application/repository/file-upload.interface.repository';
 
-import { CreatePictureDto } from '../../application/dto/create-picture.dto';
 import { CarPicture } from '../../domain/car-picture.enum';
+
+const mockedUploadService = {
+  uploadFiles: jest.fn(),
+};
 
 describe('Picture - [/picture]', () => {
   let app: INestApplication;
@@ -16,7 +20,10 @@ describe('Picture - [/picture]', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(FILE_UPLOAD_SERVICE)
+      .useValue(mockedUploadService)
+      .compile();
 
     await loadFixtures(
       `${__dirname}/fixture`,
@@ -36,6 +43,10 @@ describe('Picture - [/picture]', () => {
     await app.init();
   });
 
+  afterEach(async () => {
+    jest.clearAllMocks();
+  });
+
   const handleNotFoundResponse = (pictureId: number) => {
     return {
       error: `Not Found`,
@@ -48,15 +59,14 @@ describe('Picture - [/picture]', () => {
     id: expect.any(Number),
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
-    car: expect.any(Number),
-    src: expect.any(String),
-    description: expect.any(String),
     title: expect.any(String),
+    description: expect.any(String),
+    src: expect.any(String),
     type: expect.any(String),
     date: expect.any(String),
   };
 
-  describe.skip('Get one by id - [GET /picture/:id', () => {
+  describe('Get one by id - [GET /picture/:id', () => {
     it('should throw not found error if id doesn´t exist', async () => {
       const PICTURE_ID = 999;
 
@@ -80,19 +90,21 @@ describe('Picture - [/picture]', () => {
     });
   });
 
-  describe.skip('Create - [POST /picture]', () => {
-    const createPictureDto: CreatePictureDto = {
-      car: 1,
-      description: 'random2',
-      title: 'random3',
-      type: CarPicture.FRONT,
-      date: new Date('1993-01-02'),
-    };
+  describe('Create - [POST /picture]', () => {
+    const MOCK_UPLOAD_FILE_RESULT = 'http://www.amazon.ue/us-east-1/uuid';
 
     it('should create a picture', async () => {
+      jest
+        .spyOn(mockedUploadService, 'uploadFiles')
+        .mockResolvedValueOnce(MOCK_UPLOAD_FILE_RESULT);
+
       const { body } = await request(app.getHttpServer())
-        .post('/picture')
-        .send(createPictureDto)
+        .post('/picture/car/1')
+        .field('description', 'Some random description')
+        .field('title', 'random3')
+        .field('type', CarPicture.SIDE)
+        .field('date', '2000-01-02')
+        .attach('file', `${__dirname}/images/car2.jpg`)
         .expect(HttpStatus.CREATED);
 
       const expectedResponse = expect.objectContaining({
@@ -105,19 +117,18 @@ describe('Picture - [/picture]', () => {
     });
 
     it('should throw bad request error if description length is lower than 3', async () => {
-      const createWrongPictureDto: CreatePictureDto = {
-        ...createPictureDto,
-        description: 'be',
-      };
-
       const { body } = await request(app.getHttpServer())
-        .post('/car')
-        .send(createWrongPictureDto)
+        .post('/picture/car/1')
+        .field('description', 'So')
+        .field('title', 'random title')
+        .field('type', CarPicture.SIDE)
+        .field('date', '2000-01-02')
+        .attach('file', `${__dirname}/images/car2.jpg`)
         .expect(HttpStatus.BAD_REQUEST);
 
       const expectedResponse = expect.objectContaining({
         error: `Bad Request`,
-        message: ['/*************/'],
+        message: ['description must be longer than or equal to 3 characters'],
         statusCode: HttpStatus.BAD_REQUEST,
       });
 
@@ -125,7 +136,7 @@ describe('Picture - [/picture]', () => {
     });
   });
 
-  describe.skip('Delete one by id - [DELETE /picture/:id]', () => {
+  describe('Delete one by id - [DELETE /picture/:id]', () => {
     it('should delete the specified picture', async () => {
       const PICTURE_ID = 1;
       const RESPONSE = 'true';

@@ -1,14 +1,11 @@
 import { Transform } from 'class-transformer';
-import { IsDate, IsEnum, IsNumber, IsString, Length } from 'class-validator';
+import { IsDate, IsEnum, IsString, Length } from 'class-validator';
 
 import { CarPicture } from '../../domain/car-picture.enum';
 
 export class CreatePictureDto {
-  @IsNumber()
-  car: number;
-
   @IsString()
-  @Length(3, 21)
+  @Length(3, 120)
   description: string;
 
   @IsString()
