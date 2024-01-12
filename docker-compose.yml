@@ -13,4 +13,15 @@ services:
       - '${DB_PORT}:5432'
     volumes:
       - ./data/docker/volumes/pg/:/var/lib/pg
-      - ./docker/db/scripts:/docker-entrypoint-initdb.d
+
+  localstack:
+    image: localstack/localstack:latest
+    environment:
+      DEBUG: 1
+      LAMBDA_DOCKER_NETWORK: my-local-aws-network
+      LAMBDA_REMOTE_DOCKER: 0
+      SERVICES: s3
+    ports:
+      - 4566:4566
+    volumes:
+      - ./data/docker/volumes/localstack/var/run/docker.sock:/var/run/docker.sock      

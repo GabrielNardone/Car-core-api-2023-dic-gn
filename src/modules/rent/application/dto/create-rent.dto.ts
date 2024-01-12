@@ -8,7 +8,7 @@ export class CreateRentDto {
 
   @IsDateString()
   @Transform((target) => new Date(target.value))
-  aceptedDate: Date | null;
+  acceptedDate: Date | null;
 
   @IsBoolean()
   rejected: boolean;

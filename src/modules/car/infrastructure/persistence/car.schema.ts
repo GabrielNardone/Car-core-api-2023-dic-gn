@@ -28,4 +28,11 @@ export const CarSchema = new EntitySchema<Car>({
       type: 'int',
     },
   },
+  relations: {
+    images: {
+      target: 'Picture',
+      type: 'one-to-many',
+      inverseSide: 'car',
+    },
+  },
 });

@@ -14,6 +14,7 @@ import { BookModule } from '@/modules/book/book.module';
 import { CarModule } from '@/modules/car/car.module';
 import { UserModule } from '@/modules/user/user.module';
 
+import { PictureModule } from './modules/picture/picture.module';
 import { RentModule } from './modules/rent/rent.module';
 
 @Module({
@@ -37,6 +38,7 @@ import { RentModule } from './modules/rent/rent.module';
     BookModule,
     UserModule,
     CarModule,
+    PictureModule,
     RentModule,
   ],
   controllers: [],
