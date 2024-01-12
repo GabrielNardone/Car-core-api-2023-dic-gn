@@ -1,0 +1,15 @@
+entity: Picture
+items:
+  picture0:
+    title: 'Alfa'
+    description: 'Chevrolet photo'
+    type: 'front'
+    date: '2024/01/11'
+    src: 'https://some/randmon/path/1'
+
+  picture1:
+    description: 'Ford'
+    title: 'Ford photo'
+    type: 'back'
+    date: '2024/01/11'
+    src: 'https://some/randmon/path/2'
