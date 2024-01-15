@@ -6,7 +6,7 @@ import { UpdateRentDto } from '../dto/update-rent.dto';
 
 @Injectable()
 export class RentMapper {
-  fromDtoToObject(rent: CreateRentDto | UpdateRentDto) {
+  fromDtoToEntity(rent: CreateRentDto | UpdateRentDto) {
     const newRent = new Rent();
     newRent.pricePerDay = rent.pricePerDay;
     newRent.acceptedDate = rent.acceptedDate;

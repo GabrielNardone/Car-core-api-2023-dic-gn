@@ -48,7 +48,7 @@ export class RentService {
     if (!car)
       throw new NotFoundException(`Car with id ${createRentDto.car} not found`);
 
-    const rent = this.rentMapper.fromDtoToObject(createRentDto);
+    const rent = this.rentMapper.fromDtoToEntity(createRentDto);
     rent.user = user;
     rent.admin = admin;
     rent.car = car;
@@ -65,7 +65,7 @@ export class RentService {
   }
 
   async update(id: number, updateRentDto: UpdateRentDto): Promise<Rent> {
-    const rent = this.rentMapper.fromDtoToObject(updateRentDto);
+    const rent = this.rentMapper.fromDtoToEntity(updateRentDto);
 
     return await this.rentRepository.update(id, rent);
   }
