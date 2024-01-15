@@ -49,10 +49,10 @@ describe('Rent - [/rent]', () => {
     createdAt: expect.any(String),
     updatedAt: expect.any(String),
     pricePerDay: expect.any(Number),
-    aceptedDay: expect.any(String),
-    startingDay: expect.any(String),
-    dueDay: expect.any(String),
-    endDay: expect.any(Number),
+    acceptedDate: expect.any(String),
+    startingDate: expect.any(String),
+    dueDate: expect.any(String),
+    endDate: expect.any(String),
     rejected: expect.any(Boolean),
   };
 
@@ -99,11 +99,14 @@ describe('Rent - [/rent]', () => {
   describe('Create - [POST /rent]', () => {
     const createRentDto: CreateRentDto = {
       pricePerDay: 10000,
-      aceptedDate: new Date('2024/04/11'),
+      acceptedDate: new Date('2024/04/11'),
       startingDate: new Date('2024/04/11'),
       dueDate: new Date('2024/05/11'),
       endDate: new Date('2024/05/11'),
       rejected: false,
+      car: 1,
+      user: 1,
+      admin: 1,
     };
 
     it('should create a rent', async () => {
@@ -120,10 +123,10 @@ describe('Rent - [/rent]', () => {
       expect(body).toEqual(expectedResponse);
     });
 
-    it('should throw bad request error if the number of passenger is higher than 8', async () => {
+    it('should throw bad request error if the pricePerDay isn´t a positive number', async () => {
       const createWrongRentDto = {
         ...createRentDto,
-        pricePerDay: '10000',
+        pricePerDay: -10000,
       };
 
       const { body } = await request(app.getHttpServer())
@@ -133,7 +136,7 @@ describe('Rent - [/rent]', () => {
 
       const expectedResponse = expect.objectContaining({
         error: `Bad Request`,
-        message: ['passengers must not be greater than 8'],
+        message: ['pricePerDay must be a positive number'],
         statusCode: HttpStatus.BAD_REQUEST,
       });
 
@@ -164,7 +167,7 @@ describe('Rent - [/rent]', () => {
     });
 
     it('should throw not found error if rent does´nt exist', async () => {
-      const RENT_ID = 999;
+      const RENT_ID = 99;
 
       const { body } = await request(app.getHttpServer())
         .patch(`/rent/${RENT_ID}`)

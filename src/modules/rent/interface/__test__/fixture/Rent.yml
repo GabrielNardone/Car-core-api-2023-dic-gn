@@ -2,16 +2,22 @@ entity: Rent
 items:
   rent0:
     pricePerDay: 5000
-    aceptedDate: '2024/01/11'
+    acceptedDate: '2024/01/11'
     startingDate: '2024/01/11'
     dueDate: '2024/02/11'
     endDate: '2024/02/11' 
     rejected: false
+    car: '@car0'
+    user: '@user0'
+    admin: '@user0'
 
   rent1:
     pricePerDay: 7000
-    aceptedDate: '2024/02/11'
+    acceptedDate: '2024/02/11'
     startingDate: '2024/02/11'
     dueDate: '2024/03/11'
     endDate: '2024/03/11' 
     rejected: true
+    car: '@car1'
+    user: '@user1'
+    admin: '@user1'

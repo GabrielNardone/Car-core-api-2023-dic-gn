@@ -1,27 +1,36 @@
 import { Transform } from 'class-transformer';
-import { IsBoolean, IsDateString, IsNumber, IsPositive } from 'class-validator';
+import { IsBoolean, IsDate, IsNumber, IsPositive } from 'class-validator';
 
 export class CreateRentDto {
   @IsNumber()
   @IsPositive()
   pricePerDay: number;
 
-  @IsDateString()
+  @IsDate()
   @Transform((target) => new Date(target.value))
-  acceptedDate: Date | null;
+  acceptedDate: Date;
 
   @IsBoolean()
   rejected: boolean;
 
-  @IsDateString()
+  @IsDate()
   @Transform((target) => new Date(target.value))
   startingDate: Date;
 
-  @IsDateString()
+  @IsDate()
   @Transform((target) => new Date(target.value))
   dueDate: Date;
 
-  @IsDateString()
+  @IsDate()
   @Transform((target) => new Date(target.value))
   endDate: Date;
+
+  @IsNumber()
+  user: number;
+
+  @IsNumber()
+  admin: number;
+
+  @IsNumber()
+  car: number;
 }

@@ -10,18 +10,23 @@ export const RentSchema = new EntitySchema<Rent>({
   columns: {
     ...baseColumnSchemas,
     acceptedDate: {
+      name: 'accepted_date',
       type: 'date',
     },
     pricePerDay: {
+      name: 'price_per_day',
       type: 'int',
     },
     startingDate: {
+      name: 'starting_date',
       type: 'date',
     },
     dueDate: {
+      name: 'due_date',
       type: 'date',
     },
     endDate: {
+      name: 'end_date',
       type: 'date',
     },
     rejected: {
@@ -31,7 +36,7 @@ export const RentSchema = new EntitySchema<Rent>({
   relations: {
     car: {
       target: 'Car',
-      type: 'one-to-one',
+      type: 'many-to-one',
       joinColumn: {
         name: 'fk_car_id',
       },
@@ -47,7 +52,7 @@ export const RentSchema = new EntitySchema<Rent>({
     },
     admin: {
       target: 'User',
-      type: 'one-to-one',
+      type: 'many-to-one',
       joinColumn: {
         name: 'fk_admin_id',
       },

@@ -17,11 +17,22 @@ export class RentRepository implements IRentRepository {
   }
 
   async findAll(): Promise<Rent[]> {
-    return await this.rentRepository.find();
+    return await this.rentRepository.find({
+      relations: {
+        user: true,
+        car: true,
+      },
+    });
   }
 
   async findById(id: number): Promise<Rent> {
-    const rent = await this.rentRepository.findOneBy({ id });
+    const rent = await this.rentRepository.findOne({
+      where: { id },
+      relations: {
+        user: true,
+        car: true,
+      },
+    });
 
     if (!rent) {
       throw new NotFoundException(`Rent with id ${id} not found`);
@@ -31,7 +42,7 @@ export class RentRepository implements IRentRepository {
   }
 
   async update(id: number, rent: Rent): Promise<Rent> {
-    const updatedRent = this.rentRepository.preload({
+    const updatedRent = await this.rentRepository.preload({
       id,
       ...rent,
     });

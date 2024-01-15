@@ -7,7 +7,7 @@ export class Rent extends Base {
   pricePerDay: number;
   user: User;
   admin: User;
-  acceptedDate: Date | null;
+  acceptedDate: Date;
   rejected: boolean;
   startingDate: Date;
   dueDate: Date;
