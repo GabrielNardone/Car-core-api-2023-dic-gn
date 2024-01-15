@@ -15,6 +15,7 @@ import { CarModule } from '@/modules/car/car.module';
 import { UserModule } from '@/modules/user/user.module';
 
 import { PictureModule } from './modules/picture/picture.module';
+import { RentModule } from './modules/rent/rent.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { PictureModule } from './modules/picture/picture.module';
     UserModule,
     CarModule,
     PictureModule,
+    RentModule,
   ],
   controllers: [],
   providers: [],

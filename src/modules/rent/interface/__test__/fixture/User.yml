@@ -1,0 +1,17 @@
+entity: User
+items:
+  user0:
+    firstName: 'Mauro'
+    lastName: 'Zangaro'
+    dob: '1991-01-02'
+    email: 'mauro@google.com'
+    address: 'Lugano 345'
+    country: 'Argentina'
+
+  user1:
+    firstName: 'Hernán'
+    lastName: 'Gatitos'
+    dob: '1990-01-02'
+    email: 'hernan@google.com'
+    address: 'Caseros 345'
+    country: 'Argentina'  

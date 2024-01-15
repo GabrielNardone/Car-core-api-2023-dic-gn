@@ -43,3 +43,6 @@ data/docker
 
 # SonarQube
 .scannerwork/*
+
+# Bash command
+create-entity.sh
