@@ -37,4 +37,11 @@ export const UserSchema = new EntitySchema<User>({
       default: Role.CLIENT,
     },
   },
+  relations: {
+    document: {
+      target: 'Document',
+      type: 'one-to-many',
+      inverseSide: 'user',
+    },
+  },
 });

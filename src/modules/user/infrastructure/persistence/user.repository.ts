@@ -18,11 +18,14 @@ export class UserRepository implements IUserRepository {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({ relations: { document: true } });
   }
 
   async findById(id: number): Promise<User> {
-    const user = await this.userRepository.findOneBy({ id });
+    const user = await this.userRepository.findOne({
+      where: { id },
+      relations: { document: true },
+    });
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
