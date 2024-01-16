@@ -1,0 +1,15 @@
+entity: Document
+items:
+  document0:
+    url: 'https://www.randmon-url.com'
+    src: 'random-src/path'
+    description: 'This is a randmon description'
+    title: 'random-document'
+    user: '@user0'
+  
+  document1:
+    url: 'https://www.randmon-url.com'
+    src: 'random-src/path/1'
+    description: 'This is a randmon description'
+    title: 'random-document-1'
+    user: '@user1'
