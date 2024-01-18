@@ -30,6 +30,7 @@ export const DocumentSchema = new EntitySchema<Document>({
       },
       nullable: false,
       inverseSide: 'document',
+      onDelete: 'CASCADE',
     },
   },
 });
