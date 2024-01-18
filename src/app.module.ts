@@ -14,6 +14,7 @@ import { BookModule } from '@/modules/book/book.module';
 import { CarModule } from '@/modules/car/car.module';
 import { UserModule } from '@/modules/user/user.module';
 
+import { DocumentModule } from './modules/document/document.module';
 import { PictureModule } from './modules/picture/picture.module';
 import { RentModule } from './modules/rent/rent.module';
 
@@ -40,6 +41,7 @@ import { RentModule } from './modules/rent/rent.module';
     CarModule,
     PictureModule,
     RentModule,
+    DocumentModule,
   ],
   controllers: [],
   providers: [],
