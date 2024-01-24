@@ -9,6 +9,8 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   app.setGlobalPrefix('api');
 
+  app.enableCors();
+
   await app.startAllMicroservices();
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
