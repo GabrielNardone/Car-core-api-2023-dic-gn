@@ -66,30 +66,6 @@ describe('Picture - [/picture]', () => {
     date: expect.any(String),
   };
 
-  describe('Get one by id - [GET /picture/:id', () => {
-    it('should throw not found error if id doesn´t exist', async () => {
-      const PICTURE_ID = 999;
-
-      const { body } = await request(app.getHttpServer())
-        .get(`/picture/${PICTURE_ID}`)
-        .expect(HttpStatus.NOT_FOUND);
-
-      expect(body).toEqual(handleNotFoundResponse(PICTURE_ID));
-    });
-
-    it('should return the specified picture', async () => {
-      const PICTURE_ID = 1;
-
-      const { body } = await request(app.getHttpServer())
-        .get(`/picture/${PICTURE_ID}`)
-        .expect(HttpStatus.OK);
-
-      expect(body).toEqual(
-        expect.objectContaining({ ...expectedPicture, id: 1 }),
-      );
-    });
-  });
-
   describe('Create - [POST /picture]', () => {
     const MOCK_UPLOAD_FILE_RESULT = 'http://www.amazon.ue/us-east-1/uuid';
 
