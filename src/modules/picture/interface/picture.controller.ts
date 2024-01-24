@@ -44,11 +44,6 @@ export class PictureController {
     return this.pictureService.create(createPictureDto, file.buffer, id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<Picture> {
-    return this.pictureService.findOne(id);
-  }
-
   @Delete(':id')
   remove(@Param('id') id: number): Promise<boolean> {
     return this.pictureService.remove(id);

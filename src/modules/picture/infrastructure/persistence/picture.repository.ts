@@ -17,16 +17,6 @@ export class PictureRepository implements IPictureRepository {
     return await this.pictureRepository.save(picture);
   }
 
-  async findById(id: number): Promise<Picture> {
-    const picture = await this.pictureRepository.findOneBy({ id });
-
-    if (!picture) {
-      throw new NotFoundException(`Picture with id ${id} not found`);
-    }
-
-    return picture;
-  }
-
   async delete(id: number): Promise<boolean> {
     const { affected } = await this.pictureRepository.delete(id);
 

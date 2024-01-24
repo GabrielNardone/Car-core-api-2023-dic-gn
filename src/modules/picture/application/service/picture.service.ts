@@ -56,10 +56,6 @@ export class PictureService {
     }
   }
 
-  async findOne(id: number): Promise<Picture> {
-    return await this.pictureRepository.findById(id);
-  }
-
   async remove(id: number): Promise<boolean> {
     return await this.pictureRepository.delete(id);
   }
