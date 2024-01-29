@@ -4,10 +4,7 @@ import {
   FILE_UPLOAD_SERVICE,
   IFileUploadService,
 } from '@/common/application/repository/file-upload.interface.repository';
-import {
-  CAR_REPOSITORY,
-  ICarRepository,
-} from '@/modules/car/application/repository/car.repository.interface';
+import { CarService } from '@/modules/car/application/services/car.service';
 
 import { Picture } from '../../domain/picture.domain';
 import { CreatePictureDto } from '../dto/create-picture.dto';
@@ -26,8 +23,7 @@ export class PictureService {
     private readonly pictureMapper: PictureMapper,
     @Inject(FILE_UPLOAD_SERVICE)
     private readonly fileUploadService: IFileUploadService,
-    @Inject(CAR_REPOSITORY)
-    private readonly carRepository: ICarRepository,
+    private readonly carService: CarService,
   ) {}
 
   async create(
@@ -37,7 +33,7 @@ export class PictureService {
   ): Promise<Picture> {
     try {
       const filePath = await this.fileUploadService.uploadFiles(file);
-      const car = await this.carRepository.findById(id);
+      const car = await this.carService.findOne(id);
 
       if (!car) {
         throw new NotFoundException(`Car with id ${id} does´nt exist`);

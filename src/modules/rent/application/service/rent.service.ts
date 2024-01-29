@@ -1,9 +1,6 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
-import {
-  CAR_REPOSITORY,
-  ICarRepository,
-} from '@/modules/car/application/repository/car.repository.interface';
+import { CarService } from '@/modules/car/application/services/car.service';
 import {
   IUserRepository,
   USER_REPOSITORY,
@@ -23,8 +20,7 @@ export class RentService {
   constructor(
     @Inject(RENT_REPOSITORY)
     private readonly rentRepository: IRentRepository,
-    @Inject(CAR_REPOSITORY)
-    private readonly carRepository: ICarRepository,
+    private readonly carService: CarService,
     @Inject(USER_REPOSITORY)
     private readonly userRepository: IUserRepository,
     @Inject(RentMapper)
@@ -44,7 +40,7 @@ export class RentService {
         `Admin with id ${createRentDto.admin} not found`,
       );
 
-    const car = await this.carRepository.findById(createRentDto.car);
+    const car = await this.carService.findOne(createRentDto.car);
     if (!car)
       throw new NotFoundException(`Car with id ${createRentDto.car} not found`);
 
