@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   HttpStatus,
   Param,
   ParseFilePipeBuilder,
@@ -33,7 +32,7 @@ export class PictureController {
           fileType: /jpg|jpeg|png/,
         })
         .addMaxSizeValidator({
-          maxSize: 20000,
+          maxSize: 3145728,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -42,11 +41,6 @@ export class PictureController {
     file: Express.Multer.File,
   ): Promise<Picture> {
     return this.pictureService.create(createPictureDto, file.buffer, id);
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: number): Promise<Picture> {
-    return this.pictureService.findOne(id);
   }
 
   @Delete(':id')

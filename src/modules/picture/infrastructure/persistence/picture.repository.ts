@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { IPictureRepository } from '../../application/repository/picture.interface.repository';
+import { IPictureRepository } from '../../application/repository/picture.repository.interface';
 import { Picture } from '../../domain/picture.domain';
 import { PictureSchema } from './picture.schema';
 
@@ -15,16 +15,6 @@ export class PictureRepository implements IPictureRepository {
 
   async create(picture: Picture): Promise<Picture> {
     return await this.pictureRepository.save(picture);
-  }
-
-  async findById(id: number): Promise<Picture> {
-    const picture = await this.pictureRepository.findOneBy({ id });
-
-    if (!picture) {
-      throw new NotFoundException(`Picture with id ${id} not found`);
-    }
-
-    return picture;
   }
 
   async delete(id: number): Promise<boolean> {

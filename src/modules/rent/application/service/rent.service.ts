@@ -3,11 +3,11 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {
   CAR_REPOSITORY,
   ICarRepository,
-} from '@/modules/car/application/repository/car.interface.repository';
+} from '@/modules/car/application/repository/car.repository.interface';
 import {
   IUserRepository,
   USER_REPOSITORY,
-} from '@/modules/user/application/repository/user.interface.repository';
+} from '@/modules/user/application/repository/user.repository.interface';
 
 import { Rent } from '../../domain/rent.domain';
 import { CreateRentDto } from '../dto/create-rent.dto';
@@ -16,7 +16,7 @@ import { RentMapper } from '../mapper/rent.mapper';
 import {
   IRentRepository,
   RENT_REPOSITORY,
-} from '../repository/rent.interface.repository';
+} from '../repository/rent.repository.interface';
 
 @Injectable()
 export class RentService {

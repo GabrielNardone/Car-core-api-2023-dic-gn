@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { IRentRepository } from '../../application/repository/rent.interface.repository';
+import { IRentRepository } from '../../application/repository/rent.repository.interface';
 import { Rent } from '../../domain/rent.domain';
 import { RentSchema } from './rent.schema';
 

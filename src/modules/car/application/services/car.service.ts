@@ -7,7 +7,7 @@ import { CarMapper } from '../mapper/car.mapper';
 import {
   CAR_REPOSITORY,
   ICarRepository,
-} from '../repository/car.interface.repository';
+} from '../repository/car.repository.interface';
 
 @Injectable()
 export class CarService {

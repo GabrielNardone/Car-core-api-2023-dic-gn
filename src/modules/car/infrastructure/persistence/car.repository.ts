@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ICarRepository } from '../../application/repository/car.interface.repository';
+import { ICarRepository } from '../../application/repository/car.repository.interface';
 import { Car } from '../../domain/car.domain';
 import { CarSchema } from './car.schema';
 

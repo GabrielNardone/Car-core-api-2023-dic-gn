@@ -7,7 +7,7 @@ import {
 import {
   CAR_REPOSITORY,
   ICarRepository,
-} from '@/modules/car/application/repository/car.interface.repository';
+} from '@/modules/car/application/repository/car.repository.interface';
 
 import { Picture } from '../../domain/picture.domain';
 import { CreatePictureDto } from '../dto/create-picture.dto';
@@ -15,7 +15,7 @@ import { PictureMapper } from '../mapper/picture.mapper';
 import {
   IPictureRepository,
   PICTURE_REPOSITORY,
-} from '../repository/picture.interface.repository';
+} from '../repository/picture.repository.interface';
 
 @Injectable()
 export class PictureService {
@@ -54,10 +54,6 @@ export class PictureService {
       console.error('Error creating picture:', error);
       throw error;
     }
-  }
-
-  async findOne(id: number): Promise<Picture> {
-    return await this.pictureRepository.findById(id);
   }
 
   async remove(id: number): Promise<boolean> {

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CarMapper } from './application/mapper/car.mapper';
-import { CAR_REPOSITORY } from './application/repository/car.interface.repository';
+import { CAR_REPOSITORY } from './application/repository/car.repository.interface';
 import { CarService } from './application/services/car.service';
 import { CarRepository } from './infrastructure/persistence/car.repository';
 import { CarSchema } from './infrastructure/persistence/car.schema';

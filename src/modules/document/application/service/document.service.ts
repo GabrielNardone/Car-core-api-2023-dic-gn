@@ -3,7 +3,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {
   IUserRepository,
   USER_REPOSITORY,
-} from '@/modules/user/application/repository/user.interface.repository';
+} from '@/modules/user/application/repository/user.repository.interface';
 
 import { Document } from '../../domain/document.domain';
 import { CreateDocumentDto } from '../dto/create-document.dto';
@@ -12,7 +12,7 @@ import { DocumentMapper } from '../mapper/document.mapper';
 import {
   DOCUMENT_REPOSITORY,
   IDocumentRepository,
-} from '../repository/document.interface.repository';
+} from '../repository/document.repository.interface';
 
 @Injectable()
 export class DocumentService {

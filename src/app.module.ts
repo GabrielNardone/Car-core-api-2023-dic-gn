@@ -9,8 +9,6 @@ import { datasourceOptions } from '@configuration/orm.configuration';
 
 import { CommonModule } from '@common/common.module';
 
-import { AuthorModule } from '@/modules/author/author.module';
-import { BookModule } from '@/modules/book/book.module';
 import { CarModule } from '@/modules/car/car.module';
 import { UserModule } from '@/modules/user/user.module';
 
@@ -35,8 +33,6 @@ import { RentModule } from './modules/rent/rent.module';
       },
     }),
     CommonModule,
-    AuthorModule,
-    BookModule,
     UserModule,
     CarModule,
     PictureModule,
