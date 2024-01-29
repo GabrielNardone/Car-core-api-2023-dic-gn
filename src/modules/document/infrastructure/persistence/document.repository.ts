@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { IDocumentRepository } from '../../application/repository/document.interface.repository';
+import { IDocumentRepository } from '../../application/repository/document.repository.interface';
 import { Document } from '../../domain/document.domain';
 import { DocumentSchema } from './document.schema';
 

@@ -32,7 +32,7 @@ export class PictureController {
           fileType: /jpg|jpeg|png/,
         })
         .addMaxSizeValidator({
-          maxSize: 20000,
+          maxSize: 3145728,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,

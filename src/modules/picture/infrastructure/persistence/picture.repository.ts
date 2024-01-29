@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { IPictureRepository } from '../../application/repository/picture.interface.repository';
+import { IPictureRepository } from '../../application/repository/picture.repository.interface';
 import { Picture } from '../../domain/picture.domain';
 import { PictureSchema } from './picture.schema';
 

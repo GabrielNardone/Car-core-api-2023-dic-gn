@@ -3,6 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 
+import { CommonErrors } from '@/common/application/exceptions/common.errors';
 import { IFileUploadService } from '@/common/application/repository/file-upload.interface.repository';
 
 @Injectable()
@@ -43,8 +44,9 @@ export class S3Service implements IFileUploadService {
       const filePath = `https://${this.bucket}.s3.${this.region}.amazonaws.com/${fileKey}`;
 
       return filePath;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error uploading file:', error);
+      throw new Error(CommonErrors.UPLOADING_ERROR);
     }
   }
 }

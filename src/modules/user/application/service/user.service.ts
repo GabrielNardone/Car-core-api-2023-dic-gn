@@ -7,7 +7,7 @@ import { UserMapper } from '../mapper/user.mapper';
 import {
   IUserRepository,
   USER_REPOSITORY,
-} from '../repository/user.interface.repository';
+} from '../repository/user.repository.interface';
 
 @Injectable()
 export class UserService {
