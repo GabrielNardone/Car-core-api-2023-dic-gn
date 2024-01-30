@@ -22,6 +22,6 @@ import { CarController } from './interface/car.controller';
     },
   ],
 
-  exports: [CAR_REPOSITORY],
+  exports: [CarService],
 })
 export class CarModule {}
