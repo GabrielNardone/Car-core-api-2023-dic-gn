@@ -41,6 +41,8 @@ export class CarRepository implements ICarRepository {
       throw new NotFoundException(`Car with id ${id} not found`);
     }
 
+    await this.carRepository.save(updatedCar);
+
     return updatedCar;
   }
 

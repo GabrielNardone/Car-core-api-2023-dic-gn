@@ -44,6 +44,8 @@ export class UserRepository implements IUserRepository {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
+    await this.userRepository.save(updatedUser);
+
     return await this.userRepository.save(updatedUser);
   }
 

@@ -51,6 +51,8 @@ export class RentRepository implements IRentRepository {
       throw new NotFoundException(`Rent with id ${id} not found`);
     }
 
+    await this.rentRepository.save(updatedRent);
+
     return updatedRent;
   }
 
