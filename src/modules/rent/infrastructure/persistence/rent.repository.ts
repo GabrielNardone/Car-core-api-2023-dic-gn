@@ -51,7 +51,7 @@ export class RentRepository implements IRentRepository {
       throw new NotFoundException(`Rent with id ${id} not found`);
     }
 
-    return updatedRent;
+    return await this.rentRepository.save(updatedRent);
   }
 
   async delete(id: number): Promise<boolean> {

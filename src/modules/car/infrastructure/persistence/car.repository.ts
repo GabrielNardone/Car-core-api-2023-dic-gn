@@ -41,7 +41,7 @@ export class CarRepository implements ICarRepository {
       throw new NotFoundException(`Car with id ${id} not found`);
     }
 
-    return updatedCar;
+    return await this.carRepository.save(updatedCar);
   }
 
   async delete(id: number): Promise<boolean> {

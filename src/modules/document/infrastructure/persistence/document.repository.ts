@@ -44,7 +44,7 @@ export class DocumentRepository implements IDocumentRepository {
       throw new NotFoundException(`Document with id ${id} not found`);
     }
 
-    return updatedDocument;
+    return await this.documentRepository.save(updatedDocument);
   }
 
   async delete(id: number): Promise<boolean> {
