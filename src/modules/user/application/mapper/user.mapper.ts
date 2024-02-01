@@ -14,6 +14,7 @@ export class UserMapper {
     newUser.email = userDto.email;
     newUser.address = userDto.address;
     newUser.country = userDto.country;
+    newUser.role = userDto.role;
 
     return newUser;
   }
