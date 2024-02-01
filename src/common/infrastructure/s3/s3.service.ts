@@ -25,7 +25,7 @@ export class S3Service implements IFileUploadService {
         accessKeyId: this.accessKey,
         secretAccessKey: this.secretKey,
       },
-      endpoint: this.configService.get('s3.endpoint'),
+      endpoint: this.endpoint,
       forcePathStyle: true,
     });
   }
