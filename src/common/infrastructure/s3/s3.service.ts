@@ -13,6 +13,7 @@ export class S3Service implements IFileUploadService {
   private readonly region = this.configService.get('s3.region');
   private readonly accessKey = this.configService.get('s3.accesskey');
   private readonly secretKey = this.configService.get('s3.secretKey');
+  private readonly endpoint = this.configService.get('s3.endpoint');
 
   constructor(
     @Inject(ConfigService)
@@ -24,7 +25,7 @@ export class S3Service implements IFileUploadService {
         accessKeyId: this.accessKey,
         secretAccessKey: this.secretKey,
       },
-      endpoint: this.configService.get('s3.endpoint'),
+      endpoint: this.endpoint,
       forcePathStyle: true,
     });
   }
@@ -41,7 +42,7 @@ export class S3Service implements IFileUploadService {
         }),
       );
 
-      const filePath = `https://${this.bucket}.s3.${this.region}.amazonaws.com/${fileKey}`;
+      const filePath = `${this.endpoint}/${this.bucket}/${fileKey}`;
 
       return filePath;
     } catch (error: unknown) {
