@@ -1,5 +1,14 @@
 import { Transform } from 'class-transformer';
-import { IsDate, IsEmail, IsString, Length } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  Length,
+} from 'class-validator';
+
+import { Role } from '../../domain/format.enum';
 
 export class CreateUserDto {
   @IsString()
@@ -22,4 +31,8 @@ export class CreateUserDto {
 
   @IsString()
   country: string;
+
+  @IsOptional()
+  @IsEnum(Role)
+  role: Role;
 }
