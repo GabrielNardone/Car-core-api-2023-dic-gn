@@ -22,7 +22,10 @@ export class CarRepository implements ICarRepository {
   }
 
   async findById(id: number): Promise<Car> {
-    const car = await this.carRepository.findOneBy({ id });
+    const car = await this.carRepository.findOne({
+      where: { id },
+      relations: { images: true },
+    });
 
     if (!car) {
       throw new NotFoundException(`Car with id ${id} not found`);
@@ -41,7 +44,7 @@ export class CarRepository implements ICarRepository {
       throw new NotFoundException(`Car with id ${id} not found`);
     }
 
-    return await this.carRepository.save(updatedCar);
+    return this.carRepository.save(updatedCar);
   }
 
   async delete(id: number): Promise<boolean> {
