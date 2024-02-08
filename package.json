@@ -27,7 +27,8 @@
     "migration:revert": "npm run typeorm -- migration:revert",
     "fixtures": "cross-env NODE_ENV=development fixtures load ./data/fixture --sync --debug --dataSource=./src/configuration/orm.configuration.ts --require=ts-node/register --require=tsconfig-paths/register",
     "sonar": " ts-node src/configuration/sonar-project.ts",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "cognito:prepare": "./data/scripts/create_user_pool.sh"
   },
   "lint-staged": {
     "src/**/*.ts": [
