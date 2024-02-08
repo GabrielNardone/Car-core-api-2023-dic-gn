@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
   db:
     image: postgres:latest
     restart: always
@@ -24,4 +23,11 @@ services:
     ports:
       - 4566:4566
     volumes:
-      - ./data/docker/volumes/localstack/var/run/docker.sock:/var/run/docker.sock      
+      - ./data/docker/volumes/localstack/var/run/docker.sock:/var/run/docker.sock
+
+  cognito:
+    image: jagregory/cognito-local:latest
+    ports:
+      - 9229:9229
+    volumes:
+      - ./data/docker/volumes/.cognito:/app/.cognito
