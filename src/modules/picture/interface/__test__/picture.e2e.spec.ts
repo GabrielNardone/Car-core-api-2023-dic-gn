@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { loadFixtures } from '@data/util/loader';
 
 import { AppModule } from '@/app.module';
-import { FILE_UPLOAD_SERVICE } from '@/common/application/repository/file-upload.interface.repository';
+import { FILE_UPLOAD_SERVICE } from '@/common/application/repository/file-upload.repository.interface';
 
 import { CarPicture } from '../../domain/car-picture.enum';
 

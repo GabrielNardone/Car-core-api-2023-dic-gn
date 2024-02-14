@@ -3,7 +3,7 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {
   FILE_UPLOAD_SERVICE,
   IFileUploadService,
-} from '@/common/application/repository/file-upload.interface.repository';
+} from '@/common/application/repository/file-upload.repository.interface';
 import { CarService } from '@/modules/car/application/services/car.service';
 
 import { Picture } from '../../domain/picture.domain';

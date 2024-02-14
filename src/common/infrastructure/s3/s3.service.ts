@@ -1,10 +1,10 @@
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 
 import { CommonErrors } from '@/common/application/exceptions/common.errors';
-import { IFileUploadService } from '@/common/application/repository/file-upload.interface.repository';
+import { IFileUploadService } from '@/common/application/repository/file-upload.repository.interface';
 
 @Injectable()
 export class S3Service implements IFileUploadService {
@@ -15,10 +15,7 @@ export class S3Service implements IFileUploadService {
   private readonly secretKey = this.configService.get('s3.secretKey');
   private readonly endpoint = this.configService.get('s3.endpoint');
 
-  constructor(
-    @Inject(ConfigService)
-    private readonly configService: ConfigService,
-  ) {
+  constructor(private readonly configService: ConfigService) {
     this.client = new S3Client({
       region: this.region,
       credentials: {
