@@ -1,11 +1,10 @@
 import {
   AuthFlowType,
-  AuthenticationResultType,
-  CodeDeliveryDetailsType,
   CognitoIdentityProviderClient,
   ConfirmForgotPasswordCommand,
   ForgotPasswordCommand,
   InitiateAuthCommand,
+  InvalidPasswordException,
   SignUpCommand,
   UserNotConfirmedException,
   UserNotFoundException,
@@ -17,17 +16,19 @@ import { ConfigService } from '@nestjs/config';
 import {
   AUTH_ERRORS,
   AuthInternalServerError,
+  InvalidPasswordError,
   UserAlreadyExistsError,
   UserNotConfirmedError,
   UserNotFoundError,
-} from '../exceptions/auth.errors';
+} from '../../application/exception/auth.error';
 import {
   IAuthProviderService,
   IConfirmPasswordParams,
   IForgotPasswordParams,
   ISignInParams,
   ISignUpParams,
-} from '../interfaces/auth-provider.service.interface';
+  ITokenGroup,
+} from '../../application/interface/auth-provider.service.interface';
 
 @Injectable()
 export class AwsCognitoService implements IAuthProviderService {
@@ -51,15 +52,13 @@ export class AwsCognitoService implements IAuthProviderService {
   }
 
   async signUp(signUpParams: ISignUpParams): Promise<string> {
-    const { username, email, password } = signUpParams;
-    const userAttributes = [{ Name: 'email', Value: email }];
+    const { email, password } = signUpParams;
 
     try {
       const command = new SignUpCommand({
         ClientId: this.clientId,
-        Username: username,
+        Username: email,
         Password: password,
-        UserAttributes: userAttributes,
       });
 
       const { UserSub } = await this.cognitoClient.send(command);
@@ -74,7 +73,7 @@ export class AwsCognitoService implements IAuthProviderService {
     }
   }
 
-  async signIn(signInParams: ISignInParams): Promise<AuthenticationResultType> {
+  async signIn(signInParams: ISignInParams): Promise<ITokenGroup> {
     const { email, password } = signInParams;
 
     try {
@@ -94,6 +93,9 @@ export class AwsCognitoService implements IAuthProviderService {
       if (error instanceof UserNotFoundException) {
         throw new UserNotFoundError(AUTH_ERRORS.USER_NOT_FOUND);
       }
+      if (error instanceof InvalidPasswordException) {
+        throw new InvalidPasswordError(AUTH_ERRORS.INVALID_PASSWORD);
+      }
       console.error(error);
       throw new AuthInternalServerError(AUTH_ERRORS.SERVER_ERROR);
     }
@@ -101,7 +103,7 @@ export class AwsCognitoService implements IAuthProviderService {
 
   async forgotPassword(
     forgotPasswordParams: IForgotPasswordParams,
-  ): Promise<CodeDeliveryDetailsType> {
+  ): Promise<string> {
     const { email } = forgotPasswordParams;
 
     const input = {
@@ -112,9 +114,11 @@ export class AwsCognitoService implements IAuthProviderService {
     try {
       const command = new ForgotPasswordCommand(input);
 
-      const { CodeDeliveryDetails } = await this.cognitoClient.send(command);
+      const {
+        CodeDeliveryDetails: { Destination },
+      } = await this.cognitoClient.send(command);
 
-      return CodeDeliveryDetails;
+      return Destination;
     } catch (error) {
       if (error instanceof UserNotFoundException) {
         throw new UserNotFoundError(AUTH_ERRORS.USER_NOT_FOUND);

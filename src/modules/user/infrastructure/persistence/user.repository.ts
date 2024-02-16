@@ -34,6 +34,18 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
+  async findByExternalId(externalId: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { externalId } });
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with externalId ${externalId} not found`,
+      );
+    }
+
+    return user;
+  }
+
   async update(id: number, user: User): Promise<User> {
     const updatedUser = await this.userRepository.preload({
       id,

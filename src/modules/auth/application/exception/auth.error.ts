@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 
 export enum AUTH_ERRORS {
@@ -11,13 +12,14 @@ export enum AUTH_ERRORS {
   CONFIRM_PASSWORD_ERROR = 'Confirm password falied',
   USER_ALREADY_EXISTS = 'User already exists',
   USER_NOT_FOUND = 'User not found',
+  INVALID_PASSWORD = 'Invalid password',
   USER_NOT_CONFIRMED = 'User isn´t confirmed successfully',
 }
 
 export class AuthInternalServerError extends InternalServerErrorException {
   constructor(message: string) {
     super(message);
-    this.name = 'SignUpError';
+    this.name = 'AuthInternalServerError';
   }
 }
 
@@ -28,10 +30,17 @@ export class UserAlreadyExistsError extends BadRequestException {
   }
 }
 
-export class UserNotFoundError extends BadRequestException {
+export class UserNotFoundError extends NotFoundException {
   constructor(message: string) {
     super(message);
     this.name = 'UserNotFoundError';
+  }
+}
+
+export class InvalidPasswordError extends BadRequestException {
+  constructor(message: string) {
+    super(message);
+    this.name = 'InvalidPasswordError';
   }
 }
 

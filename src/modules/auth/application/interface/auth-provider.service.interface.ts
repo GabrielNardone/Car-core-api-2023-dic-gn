@@ -1,14 +1,8 @@
-import {
-  AuthenticationResultType,
-  CodeDeliveryDetailsType,
-} from '@aws-sdk/client-cognito-identity-provider';
-
 export interface ISignInParams {
   email: string;
   password: string;
 }
 export interface ISignUpParams {
-  username: string;
   email: string;
   password: string;
 }
@@ -20,14 +14,17 @@ export interface IConfirmPasswordParams {
   confirmationCode: string;
   newPassword: string;
 }
+export interface ITokenGroup {
+  AccessToken?: string;
+  IdToken?: string;
+  RefreshToken?: string;
+}
 
 export const AUTH_PROVIDER_SERVICE = 'AUTH_PROVIDER_SERVICE';
 export interface IAuthProviderService {
   signUp(signUpParams: ISignUpParams): Promise<string>;
-  signIn(signInParams: ISignInParams): Promise<AuthenticationResultType>;
-  forgotPassword(
-    forgotPasswordParams: IForgotPasswordParams,
-  ): Promise<CodeDeliveryDetailsType>;
+  signIn(signInParams: ISignInParams): Promise<ITokenGroup>;
+  forgotPassword(forgotPasswordParams: IForgotPasswordParams): Promise<string>;
   confirmPassword(
     confirmPasswordParams: IConfirmPasswordParams,
   ): Promise<boolean>;

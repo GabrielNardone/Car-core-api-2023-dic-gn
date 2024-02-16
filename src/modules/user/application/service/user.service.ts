@@ -18,8 +18,15 @@ export class UserService {
     private readonly userMapper: UserMapper,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
+  async create(
+    createUserDto: CreateUserDto,
+    externalId?: string,
+  ): Promise<User> {
     const user = this.userMapper.fromDtoToEntity(createUserDto);
+
+    if (externalId) {
+      user.externalId = externalId;
+    }
 
     return await this.userRepository.create(user);
   }
@@ -30,6 +37,10 @@ export class UserService {
 
   async findOne(id: number): Promise<User> {
     return await this.userRepository.findById(id);
+  }
+
+  async findOneByExternalId(externalId: string): Promise<User> {
+    return await this.userRepository.findByExternalId(externalId);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {

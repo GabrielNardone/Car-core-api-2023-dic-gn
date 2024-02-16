@@ -1,5 +1,5 @@
-export const FILE_UPLOAD_SERVICE = 'FILE_UPLOAD_SERVICE';
+export const FILE_UPLOAD_REPOSITORY = 'FILE_UPLOAD_REPOSITORY';
 
-export interface IFileUploadService {
+export interface IFileUploadRepository {
   uploadFiles(file: Buffer): Promise<string>;
 }

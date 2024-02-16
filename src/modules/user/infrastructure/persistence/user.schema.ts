@@ -36,6 +36,11 @@ export const UserSchema = new EntitySchema<User>({
       enum: Role,
       default: Role.CLIENT,
     },
+    externalId: {
+      name: 'external_id',
+      type: 'varchar',
+      nullable: true,
+    },
   },
   relations: {
     document: {

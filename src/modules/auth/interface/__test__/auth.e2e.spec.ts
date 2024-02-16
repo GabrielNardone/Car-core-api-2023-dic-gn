@@ -4,14 +4,17 @@ import * as request from 'supertest';
 
 import { AppModule } from '@/app.module';
 
+import { SignUpDto } from '../../application/dto/sign-up.dto';
 import {
   AUTH_ERRORS,
   AuthInternalServerError,
+  InvalidPasswordError,
   UserAlreadyExistsError,
   UserNotConfirmedError,
   UserNotFoundError,
-} from '../../application/exceptions/auth.errors';
-import { AUTH_PROVIDER_SERVICE } from '../../application/interfaces/auth-provider.service.interface';
+} from '../../application/exception/auth.error';
+import { AUTH_PROVIDER_SERVICE } from '../../application/interface/auth-provider.service.interface';
+import { tokenGroup } from './mock/token-group.mock';
 
 const mockedCognitoService = {
   signUp: jest.fn(),
@@ -48,29 +51,41 @@ describe('Auth - [/auth]', () => {
   };
 
   describe('Sign up - [POST /auth/sign-up]', () => {
+    const expectedResponse = {
+      firstName: expect.any(String),
+      lastName: expect.any(String),
+      dob: expect.any(String),
+      email: expect.any(String),
+      address: expect.any(String),
+      country: expect.any(String),
+      role: expect.any(String),
+      externalId: expect.any(String),
+      id: expect.any(Number),
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
+    };
+
     it('should sign up a user', async () => {
-      const MOCK_SIGN_UP_RESULT = {
-        UserSub: '0845462d-de44-4417-a89d-c09ff3e29f7c',
-      };
+      const MOCK_SIGN_UP_RESULT = '0845462d-de44-4417-a89d-c09ff3e29f7c';
 
       jest
         .spyOn(mockedCognitoService, 'signUp')
         .mockResolvedValue(MOCK_SIGN_UP_RESULT);
 
-      const signUpDto = {
-        username: 'test1',
-        email: 'test1@google.com',
-        password: 'Test12345',
+      const signUpDto: SignUpDto = {
+        email: 'hegel@gmail.com',
+        password: 'Hegel123',
+        firstName: 'Willhelm',
+        lastName: 'Hegel',
+        dob: new Date('1877-02-04'),
+        address: 'Berlín 1234',
+        country: 'Deutchland',
       };
 
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-up')
         .send(signUpDto)
         .expect(201);
-
-      const expectedResponse = {
-        UserSub: expect.any(String),
-      };
 
       expect(body).toEqual(expectedResponse);
     });
@@ -82,10 +97,14 @@ describe('Auth - [/auth]', () => {
           new UserAlreadyExistsError(AUTH_ERRORS.USER_ALREADY_EXISTS),
         );
 
-      const signUpDto = {
-        username: 'test1',
-        email: 'test1@google.com',
-        password: 'Test12345',
+      const signUpDto: SignUpDto = {
+        email: 'hegel@gmail.com',
+        password: 'Hegel123',
+        firstName: 'Willhelm',
+        lastName: 'Hegel',
+        dob: new Date('1877-02-04'),
+        address: 'Berlín 1234',
+        country: 'Deutchland',
       };
 
       const { body } = await request(app.getHttpServer())
@@ -103,10 +122,14 @@ describe('Auth - [/auth]', () => {
           new AuthInternalServerError(AUTH_ERRORS.SERVER_ERROR),
         );
 
-      const signUpDto = {
-        username: 'test1',
-        email: 'test1@google.com',
-        password: 'Test12345',
+      const signUpDto: SignUpDto = {
+        email: 'hegel@gmail.com',
+        password: 'Hegel123',
+        firstName: 'Willhelm',
+        lastName: 'Hegel',
+        dob: new Date('1877-02-04'),
+        address: 'Berlín 1234',
+        country: 'Deutchland',
       };
 
       const { body } = await request(app.getHttpServer())
@@ -120,14 +143,7 @@ describe('Auth - [/auth]', () => {
 
   describe('Sign in - [POST /auth/sign-in]', () => {
     it('Should sign in user', async () => {
-      const MOCK_SIGN_IN_RESULT = {
-        AccessToken:
-          'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNvZ25pdG9Mb2NhbCJ9.eyJhdXRoX3RpbWUiOjE3MDc5MjEwNDMsImNsaWVudF9pZCI6IjB5Zmk4ZjB6dTBmdGNqbDNqNnoyOXFnOXkiLCJldmVudF9pZCI6Ijg4MWE3YmEzLTYzMDAtNDQ2Zi05MjZjLTZiNjIwNGJjNTU0YyIsImlhdCI6MTcwNzkyMTA0MywianRpIjoiOWJhN2FkMTgtYzA2MC00YmZmLWFmYTEtOTk2OWMzZjZiMDRiIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsInN1YiI6ImZiNzhmZDBlLTE3YWMtNDRkZC1iZWM1LTZmMTQwNTg5YWZkYiIsInRva2VuX3VzZSI6ImFjY2VzcyIsInVzZXJuYW1lIjoiR2FicmllbCIsImV4cCI6MTcwODAwNzQ0MywiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo5MjI5L2xvY2FsXzBaZnhLRVVwIn0.d1u73UWd7VnUV7vk7YEz_zFLWKKeNWdl8t9nID4d9P2ES03t9ZN6Hpbu6a_sLLdOBE0s0GCmKC01O-GEKBYPwvfMiejQH7xjFIycU4SmnYuQcX5GUDwQOGXTw61_FuKOmKYZAfGq21R-R-JN5nWimWtUB3Hi4uty_ExqhC_irCwH7-Sq85s-gdQBqVkC5ZqdzJjfEKWvNESKUhXTcAwjmP4QqTtfqilVnQ05LQKzHpZyzVsPOvl2heKPTw726ySGjLwd8ZjKQeRYV6FOjRX-nZhW_jy8qKkWap6t-r066umm2frvfyq-Izb4Wye3LSH16gfvQpfKjplzyQN6Ooh1oQ',
-        IdToken:
-          'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNvZ25pdG9Mb2NhbCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiR2FicmllbCIsImF1dGhfdGltZSI6MTcwNzkyMTA0MywiZW1haWwiOiJnYWJyaWVsLmYubmFyZG9uZUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImV2ZW50X2lkIjoiODgxYTdiYTMtNjMwMC00NDZmLTkyNmMtNmI2MjA0YmM1NTRjIiwiaWF0IjoxNzA3OTIxMDQzLCJqdGkiOiJkNDY4NzYzOC00MjJiLTQ0MTAtYTU0Mi04NzliMzA5NzQwOTYiLCJzdWIiOiJmYjc4ZmQwZS0xN2FjLTQ0ZGQtYmVjNS02ZjE0MDU4OWFmZGIiLCJ0b2tlbl91c2UiOiJpZCIsImV4cCI6MTcwODAwNzQ0MywiYXVkIjoiMHlmaThmMHp1MGZ0Y2psM2o2ejI5cWc5eSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8wWmZ4S0VVcCJ9.CZndqEeAFM-e3EHyb6cPbCNoDkDtkm7y1S15JVDqTV8XVyg5uD6Id8OO-q_2TBIN5OXtsytN611ygK6hultJMHjtogWVZDtnBGd8pzgIKOIgJVAfbdLpPdWGQs9CrJVcqaeBcnrJj6kPXyx1DsWPLTWM_ag0MOOMO0tzKvIF8lfn8WSVohKNQk23GMM29yDzkWDbbzUQYX_lkxOvppfjH4c8dDK6iPaIoQvcQfp1HjFEtC4fQfABUnS6CxdpgNWChLB9NFHvg77TfPY-2m-EzYyogUTa4c86RsCfMB650ijuwe5RYM6cVE75LqOWc7f3TD1hLzKinq-h1RYEtqFgww',
-        RefreshToken:
-          'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2duaXRvOnVzZXJuYW1lIjoiR2FicmllbCIsImVtYWlsIjoiZ2FicmllbC5mLm5hcmRvbmVAZ21haWwuY29tIiwiaWF0IjoxNzA3OTIxMDQzLCJqdGkiOiIxZTcyYmU1OS0yZGVhLTRhNDEtOGMyYy00Njc0YjgyODJmOGQiLCJleHAiOjE3MDg1MjU4NDMsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6OTIyOS9sb2NhbF8wWmZ4S0VVcCJ9.VShXGgbCT0hVJcOsJSci6C4rAdJ-YCLlXfkpdGXtRf3HJ25V7YeEy45AR04OnbFS2T2Q6tjcvWV6SNZaYWFvi-Fksb8BBYujsnoBIiLYPUgBnLqE3Mqu2TVF0SLZP4JG-0HhCnWztOIQ3lbEgqokZ0qbU_UMyLTL1f7O-gkiiRFWtenu7MdTomljk8Vd0lJ9GWVRaCLP_bgAgOHyIbQXm4Oiazf5NlhqyE6KgDuJhIJ2s_t_z7nlKMqtr--fZbeDiITFat_9kLVQdZIu7rL6M0vos3PA-bDk35NVcanAC1LbAGaM-4BCTiaQhQuz5UiSbCyUgJoSdbNeN-XdQsiGaw',
-      };
+      const MOCK_SIGN_IN_RESULT = tokenGroup;
 
       jest
         .spyOn(mockedCognitoService, 'signIn')
@@ -165,9 +181,32 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-in')
         .send(signInDto)
-        .expect(400);
+        .expect(404);
 
       expect(body).toEqual(expectedErrorResponse);
+    });
+
+    it('Should throw InvalidPasswordError', async () => {
+      jest
+        .spyOn(mockedCognitoService, 'signIn')
+        .mockRejectedValue(
+          new InvalidPasswordError(AUTH_ERRORS.INVALID_PASSWORD),
+        );
+
+      const signInDto = {
+        email: 'test1@google.com',
+        password: 'invalid1',
+      };
+
+      const { body } = await request(app.getHttpServer())
+        .post('/auth/sign-in')
+        .send(signInDto)
+        .expect(400);
+
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: ['Invalid password'],
+      });
     });
 
     it('Should throw AuthInternalServerError', async () => {
@@ -233,7 +272,7 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/forgot-password')
         .send(forgotPasswordDto)
-        .expect(400);
+        .expect(404);
 
       expect(body).toEqual(expectedErrorResponse);
     });
@@ -294,7 +333,7 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/confirm-password')
         .send(confirmPasswordDto)
-        .expect(400);
+        .expect(404);
 
       expect(body).toEqual(expectedErrorResponse);
     });

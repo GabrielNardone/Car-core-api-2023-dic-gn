@@ -4,10 +4,10 @@ import { ConfigService } from '@nestjs/config';
 import { v4 as uuid } from 'uuid';
 
 import { CommonErrors } from '@/common/application/exceptions/common.errors';
-import { IFileUploadService } from '@/common/application/repository/file-upload.repository.interface';
+import { IFileUploadRepository } from '@/common/application/repository/file-upload.repository.interface';
 
 @Injectable()
-export class S3Service implements IFileUploadService {
+export class S3Service implements IFileUploadRepository {
   private readonly client: S3Client;
   private readonly bucket = this.configService.get('s3.bucket');
   private readonly region = this.configService.get('s3.region');

@@ -8,10 +8,12 @@ import {
   Param,
   Patch,
   Post,
+  Req,
 } from '@nestjs/common';
 
 import { CreateUserDto } from '../application/dto/create-user.dto';
 import { UpdateUserDto } from '../application/dto/update-user.dto';
+import { RequestWithUser } from '../application/repository/request-with-user-interface';
 import { UserService } from '../application/service/user.service';
 import { User } from '../domain/user.domain';
 
@@ -32,6 +34,11 @@ export class UserController {
   @Get(':id')
   findOne(@Param('id') id: number): Promise<User> {
     return this.userService.findOne(id);
+  }
+
+  @Get('me')
+  async findMe(@Req() request: RequestWithUser): Promise<User> {
+    return request.user;
   }
 
   @HttpCode(HttpStatus.ACCEPTED)

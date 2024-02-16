@@ -6,7 +6,9 @@ import * as request from 'supertest';
 import { loadFixtures } from '@data/util/loader';
 
 import { AppModule } from '@/app.module';
-import { FILE_UPLOAD_SERVICE } from '@/common/application/repository/file-upload.repository.interface';
+import { FILE_UPLOAD_REPOSITORY } from '@/common/application/repository/file-upload.repository.interface';
+import { MockJwtAuthGuard } from '@/common/mock/jwt-auth-guard.mock';
+import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
 
 import { CarPicture } from '../../domain/car-picture.enum';
 
@@ -21,8 +23,10 @@ describe('Picture - [/picture]', () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(FILE_UPLOAD_SERVICE)
+      .overrideProvider(FILE_UPLOAD_REPOSITORY)
       .useValue(mockedUploadService)
+      .overrideProvider(GlobalAuthGuard)
+      .useClass(MockJwtAuthGuard)
       .compile();
 
     await loadFixtures(
