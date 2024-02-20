@@ -6,6 +6,7 @@ import { Role } from '@/modules/user/domain/format.enum';
 import { User } from '@/modules/user/domain/user.domain';
 
 import { SignUpDto } from '../dto/sign-up.dto';
+import { AUTH_ERRORS, UserAlreadyExistsError } from '../exception/auth.error';
 import {
   AUTH_PROVIDER_SERVICE,
   IAuthProviderService,
@@ -25,23 +26,24 @@ export class AuthService {
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<User> {
+    const user = await this.userService.findOneByEmail(signUpDto.email);
+    if (user) {
+      throw new UserAlreadyExistsError(AUTH_ERRORS.USER_ALREADY_EXISTS);
+    }
+
     const signUpParams: ISignUpParams = {
       email: signUpDto.email,
       password: signUpDto.password,
     };
+    const externalId = await this.authProviderService.signUp(signUpParams);
+
     const createUserDto: CreateUserDto = {
-      firstName: signUpDto.firstName,
-      lastName: signUpDto.lastName,
-      email: signUpDto.email,
-      dob: signUpDto.dob,
-      address: signUpDto.address,
-      country: signUpDto.country,
+      ...signUpDto,
+      externalId,
       role: Role.CLIENT,
     };
 
-    const externalId = await this.authProviderService.signUp(signUpParams);
-
-    return await this.userService.create(createUserDto, externalId);
+    return await this.userService.create(createUserDto);
   }
 
   async signIn(signInParams: ISignInParams): Promise<ITokenGroup> {

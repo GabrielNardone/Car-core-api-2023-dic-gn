@@ -14,7 +14,6 @@ import {
   UserNotFoundError,
 } from '../../application/exception/auth.error';
 import { AUTH_PROVIDER_SERVICE } from '../../application/interface/auth-provider.service.interface';
-import { tokenGroup } from './mock/token-group.mock';
 
 const mockedCognitoService = {
   signUp: jest.fn(),
@@ -123,7 +122,7 @@ describe('Auth - [/auth]', () => {
         );
 
       const signUpDto: SignUpDto = {
-        email: 'hegel@gmail.com',
+        email: 'kant@gmail.com',
         password: 'Hegel123',
         firstName: 'Willhelm',
         lastName: 'Hegel',
@@ -143,7 +142,11 @@ describe('Auth - [/auth]', () => {
 
   describe('Sign in - [POST /auth/sign-in]', () => {
     it('Should sign in user', async () => {
-      const MOCK_SIGN_IN_RESULT = tokenGroup;
+      const MOCK_SIGN_IN_RESULT = {
+        AccessToken: 'test',
+        IdToken: 'test',
+        RefreshToken: 'test',
+      };
 
       jest
         .spyOn(mockedCognitoService, 'signIn')
@@ -379,5 +382,9 @@ describe('Auth - [/auth]', () => {
 
       expect(body).toEqual(expectedErrorResponse);
     });
+  });
+
+  afterAll(async () => {
+    await app.close();
   });
 });

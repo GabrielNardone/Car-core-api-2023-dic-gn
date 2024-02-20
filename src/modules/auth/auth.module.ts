@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
+import { APP_GUARD } from '@nestjs/core';
 
 import { UserModule } from '../user/user.module';
 import { AUTH_PROVIDER_SERVICE } from './application/interface/auth-provider.service.interface';
@@ -10,7 +10,7 @@ import { AuthController } from './interface/auth.controller';
 import { GlobalAuthGuard } from './interface/guard/auth.guard';
 
 @Module({
-  imports: [PassportModule.register({ defaultStrategy: 'jwt' }), UserModule],
+  imports: [UserModule],
   controllers: [AuthController],
   providers: [
     {
@@ -18,13 +18,12 @@ import { GlobalAuthGuard } from './interface/guard/auth.guard';
       useClass: AwsCognitoService,
     },
     {
-      provide: 'APP_GUARD',
+      provide: APP_GUARD,
       useExisting: GlobalAuthGuard,
     },
     GlobalAuthGuard,
     AuthService,
     JwtStrategy,
   ],
-  exports: [JwtStrategy],
 })
 export class AuthModule {}

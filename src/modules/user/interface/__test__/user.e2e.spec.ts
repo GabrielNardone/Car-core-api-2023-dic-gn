@@ -9,9 +9,7 @@ import { AppModule } from '@/app.module';
 import { MockJwtAuthGuard } from '@/common/mock/jwt-auth-guard.mock';
 import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
 
-import { CreateUserDto } from '../../application/dto/create-user.dto';
 import { UpdateUserDto } from '../../application/dto/update-user.dto';
-import { Role } from '../../domain/format.enum';
 
 describe('User - [/user]', () => {
   let app: INestApplication;
@@ -100,56 +98,6 @@ describe('User - [/user]', () => {
         .expect(HttpStatus.OK);
 
       expect(body).toEqual(expect.objectContaining({ ...expectedUser, id: 1 }));
-    });
-  });
-
-  describe('Create - [POST /user]', () => {
-    it('should create an user', async () => {
-      const createUserDto: CreateUserDto = {
-        firstName: 'Matias',
-        lastName: 'Nardone',
-        dob: new Date('1993-01-02'),
-        email: 'matias@google.com',
-        address: 'Ejército 100',
-        country: 'Argentina',
-        role: Role.CLIENT,
-      };
-
-      const { body } = await request(app.getHttpServer())
-        .post('/user')
-        .send(createUserDto)
-        .expect(HttpStatus.CREATED);
-
-      const expectedResponse = expect.objectContaining({
-        ...expectedUser,
-        id: 3,
-        firstName: 'Matias',
-      });
-
-      expect(body).toEqual(expectedResponse);
-    });
-
-    it('should throw bad request error if the email is missing', async () => {
-      const createUserDto = {
-        firstName: 'Mauro',
-        lastName: 'Zangaro',
-        dob: new Date('1993-01-02'),
-        address: 'Ejército 100',
-        country: 'Argentina',
-      };
-
-      const { body } = await request(app.getHttpServer())
-        .post('/user')
-        .send(createUserDto)
-        .expect(HttpStatus.BAD_REQUEST);
-
-      const expectedResponse = expect.objectContaining({
-        error: `Bad Request`,
-        message: ['email must be an email'],
-        statusCode: HttpStatus.BAD_REQUEST,
-      });
-
-      expect(body).toEqual(expectedResponse);
     });
   });
 

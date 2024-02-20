@@ -35,4 +35,7 @@ export class CreateUserDto {
   @IsOptional()
   @IsEnum(Role)
   role: Role;
+
+  @IsString()
+  externalId: string;
 }

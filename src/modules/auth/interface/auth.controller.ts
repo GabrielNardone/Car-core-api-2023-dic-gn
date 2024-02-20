@@ -2,13 +2,13 @@ import { Body, Controller, Post } from '@nestjs/common';
 
 import { User } from '@/modules/user/domain/user.domain';
 
-import { Public } from '../application/decorator/public-route.decorator';
 import { ConfirmPasswordDto } from '../application/dto/confirm-password.dto';
 import { ForgotPasswordDto } from '../application/dto/forgot-password.dto';
 import { SignInDto } from '../application/dto/sign-in.dto';
 import { SignUpDto } from '../application/dto/sign-up.dto';
 import { ITokenGroup } from '../application/interface/auth-provider.service.interface';
 import { AuthService } from '../application/service/auth.service';
+import { Public } from './decorator/public-route.decorator';
 
 @Controller('auth')
 @Public()

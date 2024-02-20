@@ -39,7 +39,6 @@ export const UserSchema = new EntitySchema<User>({
     externalId: {
       name: 'external_id',
       type: 'varchar',
-      nullable: true,
     },
   },
   relations: {

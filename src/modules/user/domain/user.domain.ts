@@ -10,7 +10,7 @@ export class User extends Base {
   email: string;
   address: string;
   country: string;
-  role?: Role;
-  externalId?: string;
+  externalId: string;
+  role?: Role = Role.CLIENT;
   document?: Document[];
 }
