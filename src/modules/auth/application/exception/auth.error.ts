@@ -6,12 +6,12 @@ import {
 
 export enum AUTH_ERRORS {
   SERVER_ERROR = 'Server error, something went wrong in server side',
-  SIGN_IN_ERROR = 'Sign in falied',
-  SIGN_UP_ERROR = 'Sign up falied',
-  FORGOT_PASSWORD_ERROR = 'Forgot password falied',
-  CONFIRM_PASSWORD_ERROR = 'Confirm password falied',
-  USER_ALREADY_EXISTS = 'User already exists',
-  USER_NOT_FOUND = 'User not found',
+  SIGN_IN_ERROR = 'Sign in failed',
+  SIGN_UP_ERROR = 'Sign up failed',
+  FORGOT_PASSWORD_ERROR = 'Forgot password failed',
+  CONFIRM_PASSWORD_ERROR = 'Confirm password failed',
+  USER_ALREADY_EXISTS = 'The user already exists in data base',
+  USER_NOT_FOUND = 'User was not found in data base',
   INVALID_PASSWORD = 'Invalid password',
   USER_NOT_CONFIRMED = 'User isn´t confirmed successfully',
 }

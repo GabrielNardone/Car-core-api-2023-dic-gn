@@ -1,9 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { CreateUserDto } from '@/modules/user/application/dto/create-user.dto';
 import { UserService } from '@/modules/user/application/service/user.service';
-import { Role } from '@/modules/user/domain/format.enum';
-import { User } from '@/modules/user/domain/user.domain';
 
 import { SignUpDto } from '../dto/sign-up.dto';
 import { AUTH_ERRORS, UserAlreadyExistsError } from '../exception/auth.error';
@@ -13,7 +10,6 @@ import {
   IConfirmPasswordParams,
   IForgotPasswordParams,
   ISignInParams,
-  ISignUpParams,
   ITokenGroup,
 } from '../interface/auth-provider.service.interface';
 
@@ -25,25 +21,20 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto): Promise<User> {
+  async signUp(signUpDto: SignUpDto): Promise<void> {
+    const { email, password } = signUpDto;
+
     const user = await this.userService.findOneByEmail(signUpDto.email);
     if (user) {
       throw new UserAlreadyExistsError(AUTH_ERRORS.USER_ALREADY_EXISTS);
     }
 
-    const signUpParams: ISignUpParams = {
-      email: signUpDto.email,
-      password: signUpDto.password,
-    };
-    const externalId = await this.authProviderService.signUp(signUpParams);
+    const externalId = await this.authProviderService.signUp({
+      email,
+      password,
+    });
 
-    const createUserDto: CreateUserDto = {
-      ...signUpDto,
-      externalId,
-      role: Role.CLIENT,
-    };
-
-    return await this.userService.create(createUserDto);
+    await this.userService.create({ ...signUpDto, externalId });
   }
 
   async signIn(signInParams: ISignInParams): Promise<ITokenGroup> {

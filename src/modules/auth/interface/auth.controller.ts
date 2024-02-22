@@ -1,7 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
 
-import { User } from '@/modules/user/domain/user.domain';
-
 import { ConfirmPasswordDto } from '../application/dto/confirm-password.dto';
 import { ForgotPasswordDto } from '../application/dto/forgot-password.dto';
 import { SignInDto } from '../application/dto/sign-in.dto';
@@ -16,7 +14,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('sign-up')
-  async signUp(@Body() signUpDto: SignUpDto): Promise<User> {
+  async signUp(@Body() signUpDto: SignUpDto): Promise<void> {
     return await this.authService.signUp(signUpDto);
   }
 

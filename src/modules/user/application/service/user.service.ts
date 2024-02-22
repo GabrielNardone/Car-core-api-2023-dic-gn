@@ -1,13 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { Role } from '../../domain/format.enum';
 import { User } from '../../domain/user.domain';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserMapper } from '../mapper/user.mapper';
 import {
   IUserRepository,
   USER_REPOSITORY,
 } from '../repository/user.repository.interface';
+
+export interface IUser {
+  firstName: string;
+  lastName: string;
+  dob: Date;
+  email: string;
+  address: string;
+  country: string;
+  externalId: string;
+  role?: Role;
+}
 
 @Injectable()
 export class UserService {
@@ -18,8 +29,8 @@ export class UserService {
     private readonly userMapper: UserMapper,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = this.userMapper.fromDtoToEntity(createUserDto);
+  async create(iUser: IUser): Promise<User> {
+    const user = this.userMapper.fromInterfaceToEntity(iUser);
 
     return await this.userRepository.create(user);
   }
@@ -41,7 +52,7 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = this.userMapper.fromDtoToEntity(updateUserDto);
+    const user = this.userMapper.fromInterfaceToEntity(updateUserDto);
 
     return await this.userRepository.update(id, user);
   }

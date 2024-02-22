@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 
 import { User } from '../../domain/user.domain';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { IUser } from '../service/user.service';
 
 @Injectable()
 export class UserMapper {
-  public fromDtoToEntity(userDto: CreateUserDto | UpdateUserDto) {
+  public fromInterfaceToEntity(iUser: IUser | UpdateUserDto) {
     const newUser = new User();
-    newUser.firstName = userDto.firstName;
-    newUser.lastName = userDto.lastName;
-    newUser.dob = userDto.dob;
-    newUser.email = userDto.email;
-    newUser.address = userDto.address;
-    newUser.country = userDto.country;
-    newUser.role = userDto.role;
-    newUser.externalId = userDto.externalId;
+    newUser.firstName = iUser.firstName;
+    newUser.lastName = iUser.lastName;
+    newUser.dob = iUser.dob;
+    newUser.email = iUser.email;
+    newUser.address = iUser.address;
+    newUser.country = iUser.country;
+    newUser.externalId = iUser.externalId;
+    newUser.role = iUser?.role;
 
     return newUser;
   }

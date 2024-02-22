@@ -96,6 +96,9 @@ export class AwsCognitoService implements IAuthProviderService {
       if (error instanceof InvalidPasswordException) {
         throw new InvalidPasswordError(AUTH_ERRORS.INVALID_PASSWORD);
       }
+      if (error instanceof UserNotConfirmedException) {
+        throw new UserNotConfirmedError(AUTH_ERRORS.USER_NOT_CONFIRMED);
+      }
       console.error(error);
       throw new AuthInternalServerError(AUTH_ERRORS.SERVER_ERROR);
     }

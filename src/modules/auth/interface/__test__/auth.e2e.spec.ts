@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 
@@ -50,20 +50,6 @@ describe('Auth - [/auth]', () => {
   };
 
   describe('Sign up - [POST /auth/sign-up]', () => {
-    const expectedResponse = {
-      firstName: expect.any(String),
-      lastName: expect.any(String),
-      dob: expect.any(String),
-      email: expect.any(String),
-      address: expect.any(String),
-      country: expect.any(String),
-      role: expect.any(String),
-      externalId: expect.any(String),
-      id: expect.any(Number),
-      createdAt: expect.any(String),
-      updatedAt: expect.any(String),
-    };
-
     it('should sign up a user', async () => {
       const MOCK_SIGN_UP_RESULT = '0845462d-de44-4417-a89d-c09ff3e29f7c';
 
@@ -81,15 +67,13 @@ describe('Auth - [/auth]', () => {
         country: 'Deutchland',
       };
 
-      const { body } = await request(app.getHttpServer())
+      await request(app.getHttpServer())
         .post('/auth/sign-up')
         .send(signUpDto)
-        .expect(201);
-
-      expect(body).toEqual(expectedResponse);
+        .expect(HttpStatus.CREATED);
     });
 
-    it('Should throw UserAlreadyExistsError', async () => {
+    it('Should throw UserAlreadyExistsError when user already exists in data base', async () => {
       jest
         .spyOn(mockedCognitoService, 'signUp')
         .mockRejectedValue(
@@ -109,9 +93,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-up')
         .send(signUpDto)
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'The user already exists in data base',
+      });
     });
 
     it('Should throw AuthInternalServerError', async () => {
@@ -134,9 +121,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-up')
         .send(signUpDto)
-        .expect(500);
+        .expect(HttpStatus.INTERNAL_SERVER_ERROR);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'Server error, something went wrong in server side',
+      });
     });
   });
 
@@ -160,18 +150,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-in')
         .send(signInDto)
-        .expect(201);
+        .expect(HttpStatus.CREATED);
 
-      const expectedResult = {
-        AccessToken: expect.any(String),
-        IdToken: expect.any(String),
-        RefreshToken: expect.any(String),
-      };
-
-      expect(body).toEqual(expectedResult);
+      expect(body).toEqual(MOCK_SIGN_IN_RESULT);
     });
 
-    it('Should throw UserNotFoundError', async () => {
+    it('Should throw UserNotFoundError when user was not found in data base ', async () => {
       jest
         .spyOn(mockedCognitoService, 'signIn')
         .mockRejectedValue(new UserNotFoundError(AUTH_ERRORS.USER_NOT_FOUND));
@@ -184,12 +168,15 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-in')
         .send(signInDto)
-        .expect(404);
+        .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'User was not found in data base',
+      });
     });
 
-    it('Should throw InvalidPasswordError', async () => {
+    it('Should throw InvalidPasswordError if password is invalid', async () => {
       jest
         .spyOn(mockedCognitoService, 'signIn')
         .mockRejectedValue(
@@ -204,11 +191,34 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-in')
         .send(signInDto)
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
 
       expect(body).toEqual({
         ...expectedErrorResponse,
         message: ['Invalid password'],
+      });
+    });
+
+    it('Should throw UserNotConfirmedError when user hasn`t been confirmed', async () => {
+      jest
+        .spyOn(mockedCognitoService, 'signIn')
+        .mockRejectedValue(
+          new UserNotConfirmedError(AUTH_ERRORS.USER_NOT_CONFIRMED),
+        );
+
+      const signInDto = {
+        email: 'test1@google.com',
+        password: 'Test12345',
+      };
+
+      const { body } = await request(app.getHttpServer())
+        .post('/auth/sign-in')
+        .send(signInDto)
+        .expect(HttpStatus.BAD_REQUEST);
+
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'User isn´t confirmed successfully',
       });
     });
 
@@ -227,9 +237,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/sign-in')
         .send(signInDto)
-        .expect(500);
+        .expect(HttpStatus.INTERNAL_SERVER_ERROR);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'Server error, something went wrong in server side',
+      });
     });
   });
 
@@ -252,18 +265,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/forgot-password')
         .send(forgotPasswordDto)
-        .expect(201);
+        .expect(HttpStatus.CREATED);
 
-      const expectedResponse = {
-        AttributeName: expect.any(String),
-        DeliveryMedium: expect.any(String),
-        Destination: expect.any(String),
-      };
-
-      expect(body).toEqual(expectedResponse);
+      expect(body).toEqual(MOCK_FORGOT_PASSWORD_RESULT);
     });
 
-    it('Should throw UserNotFoundError', async () => {
+    it('Should throw UserNotFoundError when user was not found in data base ', async () => {
       jest
         .spyOn(mockedCognitoService, 'forgotPassword')
         .mockRejectedValue(new UserNotFoundError(AUTH_ERRORS.USER_NOT_FOUND));
@@ -275,9 +282,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/forgot-password')
         .send(forgotPasswordDto)
-        .expect(404);
+        .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'User was not found in data base',
+      });
     });
 
     it('Should throw AuthInternalServerError', async () => {
@@ -294,9 +304,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/forgot-password')
         .send(forgotPasswordDto)
-        .expect(500);
+        .expect(HttpStatus.INTERNAL_SERVER_ERROR);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'Server error, something went wrong in server side',
+      });
     });
   });
 
@@ -317,12 +330,12 @@ describe('Auth - [/auth]', () => {
       const { text } = await request(app.getHttpServer())
         .post('/auth/confirm-password')
         .send(confirmPasswordDto)
-        .expect(201);
+        .expect(HttpStatus.CREATED);
 
       expect(text).toEqual(MOCK_CONFIRM_PASSWORD_RESULT);
     });
 
-    it('Should throw UserNotFoundError', async () => {
+    it('Should throw UserNotFoundError when user was not found in data base ', async () => {
       jest
         .spyOn(mockedCognitoService, 'confirmPassword')
         .mockRejectedValue(new UserNotFoundError(AUTH_ERRORS.USER_NOT_FOUND));
@@ -336,12 +349,15 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/confirm-password')
         .send(confirmPasswordDto)
-        .expect(404);
+        .expect(HttpStatus.NOT_FOUND);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'User was not found in data base',
+      });
     });
 
-    it('Should throw UserNotConfirmedError', async () => {
+    it('Should throw UserNotConfirmedError when user hasn´t been confirmed', async () => {
       jest
         .spyOn(mockedCognitoService, 'confirmPassword')
         .mockRejectedValue(
@@ -357,9 +373,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/confirm-password')
         .send(confirmPasswordDto)
-        .expect(400);
+        .expect(HttpStatus.BAD_REQUEST);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'User isn´t confirmed successfully',
+      });
     });
 
     it('Should throw AuthInternalServerError', async () => {
@@ -378,9 +397,12 @@ describe('Auth - [/auth]', () => {
       const { body } = await request(app.getHttpServer())
         .post('/auth/confirm-password')
         .send(confirmPasswordDto)
-        .expect(500);
+        .expect(HttpStatus.INTERNAL_SERVER_ERROR);
 
-      expect(body).toEqual(expectedErrorResponse);
+      expect(body).toEqual({
+        ...expectedErrorResponse,
+        message: 'Server error, something went wrong in server side',
+      });
     });
   });
 
