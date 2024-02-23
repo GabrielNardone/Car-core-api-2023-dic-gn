@@ -34,6 +34,26 @@ export class UserRepository implements IUserRepository {
     return user;
   }
 
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { email } });
+    if (user) {
+      return user;
+    }
+    return null;
+  }
+
+  async findByExternalId(externalId: string): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { externalId } });
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with externalId ${externalId} not found`,
+      );
+    }
+
+    return user;
+  }
+
   async update(id: number, user: User): Promise<User> {
     const updatedUser = await this.userRepository.preload({
       id,

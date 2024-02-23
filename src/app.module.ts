@@ -12,6 +12,7 @@ import { CommonModule } from '@common/common.module';
 import { CarModule } from '@/modules/car/car.module';
 import { UserModule } from '@/modules/user/user.module';
 
+import { AuthModule } from './modules/auth/auth.module';
 import { DocumentModule } from './modules/document/document.module';
 import { PictureModule } from './modules/picture/picture.module';
 import { RentModule } from './modules/rent/rent.module';
@@ -38,6 +39,7 @@ import { RentModule } from './modules/rent/rent.module';
     PictureModule,
     RentModule,
     DocumentModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

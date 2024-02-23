@@ -6,6 +6,8 @@ import * as request from 'supertest';
 import { loadFixtures } from '@data/util/loader';
 
 import { AppModule } from '@/app.module';
+import { MockJwtAuthGuard } from '@/common/mock/jwt-auth-guard.mock';
+import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
 
 import { CreateDocumentDto } from '../../application/dto/create-document.dto';
 import { UpdateDocumentDto } from '../../application/dto/update-document.dto';
@@ -16,7 +18,10 @@ describe('User - [/user]', () => {
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(GlobalAuthGuard)
+      .useClass(MockJwtAuthGuard)
+      .compile();
 
     await loadFixtures(
       `${__dirname}/fixture`,

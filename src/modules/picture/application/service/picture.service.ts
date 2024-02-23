@@ -1,9 +1,9 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 
 import {
-  FILE_UPLOAD_SERVICE,
-  IFileUploadService,
-} from '@/common/application/repository/file-upload.interface.repository';
+  FILE_UPLOAD_REPOSITORY,
+  IFileUploadRepository,
+} from '@/common/application/repository/file-upload.repository.interface';
 import { CarService } from '@/modules/car/application/services/car.service';
 
 import { Picture } from '../../domain/picture.domain';
@@ -21,8 +21,8 @@ export class PictureService {
     private readonly pictureRepository: IPictureRepository,
     @Inject(PictureMapper)
     private readonly pictureMapper: PictureMapper,
-    @Inject(FILE_UPLOAD_SERVICE)
-    private readonly fileUploadService: IFileUploadService,
+    @Inject(FILE_UPLOAD_REPOSITORY)
+    private readonly fileUploadRepository: IFileUploadRepository,
     private readonly carService: CarService,
   ) {}
 
@@ -32,7 +32,7 @@ export class PictureService {
     id: number,
   ): Promise<Picture> {
     try {
-      const filePath = await this.fileUploadService.uploadFiles(file);
+      const filePath = await this.fileUploadRepository.uploadFiles(file);
       const car = await this.carService.findOne(id);
 
       if (!car) {

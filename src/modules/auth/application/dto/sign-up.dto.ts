@@ -2,15 +2,26 @@ import { Transform } from 'class-transformer';
 import {
   IsDate,
   IsEmail,
-  IsEnum,
-  IsOptional,
   IsString,
   Length,
+  Matches,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
-import { Role } from '../../domain/format.enum';
+export class SignUpDto {
+  @IsEmail()
+  email: string;
 
-export class CreateUserDto {
+  @MinLength(8)
+  @MaxLength(20)
+  @IsString()
+  @Matches(/(?:(?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    message:
+      'The password must have a Uppercase, lowercase letter and a number',
+  })
+  password: string;
+
   @IsString()
   @Length(3, 21)
   firstName: string;
@@ -23,16 +34,9 @@ export class CreateUserDto {
   @Transform(({ value }) => new Date(value))
   dob: Date;
 
-  @IsEmail()
-  email: string;
-
   @IsString()
   address: string;
 
   @IsString()
   country: string;
-
-  @IsOptional()
-  @IsEnum(Role)
-  role: Role;
 }

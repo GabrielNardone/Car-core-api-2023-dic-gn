@@ -23,6 +23,6 @@ import { UserController } from './interface/user.controller';
     },
   ],
 
-  exports: [USER_REPOSITORY],
+  exports: [USER_REPOSITORY, UserService],
 })
 export class UserModule {}

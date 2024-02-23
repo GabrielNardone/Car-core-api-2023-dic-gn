@@ -1,13 +1,24 @@
 import { Inject, Injectable } from '@nestjs/common';
 
+import { Role } from '../../domain/format.enum';
 import { User } from '../../domain/user.domain';
-import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserMapper } from '../mapper/user.mapper';
 import {
   IUserRepository,
   USER_REPOSITORY,
 } from '../repository/user.repository.interface';
+
+export interface IUser {
+  firstName: string;
+  lastName: string;
+  dob: Date;
+  email: string;
+  address: string;
+  country: string;
+  externalId: string;
+  role?: Role;
+}
 
 @Injectable()
 export class UserService {
@@ -18,8 +29,8 @@ export class UserService {
     private readonly userMapper: UserMapper,
   ) {}
 
-  async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = this.userMapper.fromDtoToEntity(createUserDto);
+  async create(iUser: IUser): Promise<User> {
+    const user = this.userMapper.toEntity(iUser);
 
     return await this.userRepository.create(user);
   }
@@ -32,8 +43,16 @@ export class UserService {
     return await this.userRepository.findById(id);
   }
 
+  async findOneByEmail(email: string): Promise<User> {
+    return await this.userRepository.findByEmail(email);
+  }
+
+  async findOneByExternalId(externalId: string): Promise<User> {
+    return await this.userRepository.findByExternalId(externalId);
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = this.userMapper.fromDtoToEntity(updateUserDto);
+    const user = this.userMapper.toEntity(updateUserDto);
 
     return await this.userRepository.update(id, user);
   }
