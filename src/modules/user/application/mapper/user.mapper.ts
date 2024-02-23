@@ -6,16 +6,16 @@ import { IUser } from '../service/user.service';
 
 @Injectable()
 export class UserMapper {
-  public fromInterfaceToEntity(iUser: IUser | UpdateUserDto) {
+  public toEntity(source: IUser | UpdateUserDto) {
     const newUser = new User();
-    newUser.firstName = iUser.firstName;
-    newUser.lastName = iUser.lastName;
-    newUser.dob = iUser.dob;
-    newUser.email = iUser.email;
-    newUser.address = iUser.address;
-    newUser.country = iUser.country;
-    newUser.externalId = iUser.externalId;
-    newUser.role = iUser?.role;
+    newUser.firstName = source.firstName;
+    newUser.lastName = source.lastName;
+    newUser.dob = source.dob;
+    newUser.email = source.email;
+    newUser.address = source.address;
+    newUser.country = source.country;
+    newUser.externalId = source.externalId;
+    newUser.role = source?.role;
 
     return newUser;
   }

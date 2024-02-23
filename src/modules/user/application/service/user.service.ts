@@ -30,7 +30,7 @@ export class UserService {
   ) {}
 
   async create(iUser: IUser): Promise<User> {
-    const user = this.userMapper.fromInterfaceToEntity(iUser);
+    const user = this.userMapper.toEntity(iUser);
 
     return await this.userRepository.create(user);
   }
@@ -52,7 +52,7 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-    const user = this.userMapper.fromInterfaceToEntity(updateUserDto);
+    const user = this.userMapper.toEntity(updateUserDto);
 
     return await this.userRepository.update(id, user);
   }
