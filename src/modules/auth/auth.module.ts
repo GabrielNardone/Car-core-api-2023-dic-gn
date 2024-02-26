@@ -8,7 +8,6 @@ import { AwsCognitoService } from './infrastructure/cognito/aws-cognito.service'
 import { JwtStrategy } from './infrastructure/passport/jwt.strategy';
 import { AuthController } from './interface/auth.controller';
 import { GlobalAuthGuard } from './interface/guard/auth.guard';
-import { RoleGuard } from './interface/guard/roles.guard';
 
 @Module({
   imports: [UserModule],
@@ -22,12 +21,7 @@ import { RoleGuard } from './interface/guard/roles.guard';
       provide: APP_GUARD,
       useExisting: GlobalAuthGuard,
     },
-    {
-      provide: APP_GUARD,
-      useExisting: RoleGuard,
-    },
     GlobalAuthGuard,
-    RoleGuard,
     AuthService,
     JwtStrategy,
   ],

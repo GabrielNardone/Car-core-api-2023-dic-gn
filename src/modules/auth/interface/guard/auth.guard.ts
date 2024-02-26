@@ -1,8 +1,16 @@
-import { ExecutionContext, Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  ForbiddenException,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 
+import { Role } from '@/modules/user/domain/format.enum';
+import { User } from '@/modules/user/domain/user.domain';
+
 import { IS_PUBLIC_KEY } from '../decorator/public-route.decorator';
+import { META_ROLES } from '../decorator/roles.decorator';
 
 @Injectable()
 export class GlobalAuthGuard extends AuthGuard('jwt') {
@@ -16,16 +24,30 @@ export class GlobalAuthGuard extends AuthGuard('jwt') {
       IS_PUBLIC_KEY,
     );
 
-    if (isPublicRoute) {
-      return true;
-    }
+    const validRoles: Role[] = this.reflector.getAllAndMerge(META_ROLES, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (isPublicRoute) return true;
+    if (!validRoles || validRoles.length === 0) return true;
 
     try {
       await super.canActivate(context);
-      return true;
     } catch (error) {
       return false;
     }
+
+    const request = context.switchToHttp().getRequest();
+    const user: User = request.user;
+
+    if (!validRoles.includes(user.role)) {
+      throw new ForbiddenException(
+        `User ${user.firstName} ${user.lastName} need a valid role: [${validRoles}]`,
+      );
+    }
+
+    return true;
   }
 
   private getDecoratorMetadata<T>(context: ExecutionContext, key: string): T {

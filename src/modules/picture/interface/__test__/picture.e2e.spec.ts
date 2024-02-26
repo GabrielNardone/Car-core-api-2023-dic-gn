@@ -9,7 +9,6 @@ import { AppModule } from '@/app.module';
 import { FILE_UPLOAD_REPOSITORY } from '@/common/application/repository/file-upload.repository.interface';
 import { MockGuard } from '@/common/mock/jwt-auth-guard.mock';
 import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
-import { RoleGuard } from '@/modules/auth/interface/guard/roles.guard';
 
 import { CarPicture } from '../../domain/car-picture.enum';
 
@@ -27,8 +26,6 @@ describe('Picture - [/picture]', () => {
       .overrideProvider(FILE_UPLOAD_REPOSITORY)
       .useValue(mockedUploadService)
       .overrideProvider(GlobalAuthGuard)
-      .useClass(MockGuard)
-      .overrideProvider(RoleGuard)
       .useClass(MockGuard)
       .compile();
 

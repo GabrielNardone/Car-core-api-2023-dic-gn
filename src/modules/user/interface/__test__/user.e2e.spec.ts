@@ -8,7 +8,6 @@ import { loadFixtures } from '@data/util/loader';
 import { AppModule } from '@/app.module';
 import { MockGuard } from '@/common/mock/jwt-auth-guard.mock';
 import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
-import { RoleGuard } from '@/modules/auth/interface/guard/roles.guard';
 
 import { UpdateUserDto } from '../../application/dto/update-user.dto';
 
@@ -20,8 +19,6 @@ describe('User - [/user]', () => {
       imports: [AppModule],
     })
       .overrideProvider(GlobalAuthGuard)
-      .useClass(MockGuard)
-      .overrideProvider(RoleGuard)
       .useClass(MockGuard)
       .compile();
 
