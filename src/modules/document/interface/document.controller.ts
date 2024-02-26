@@ -10,6 +10,9 @@ import {
   Post,
 } from '@nestjs/common';
 
+import { RoleProtected } from '@/modules/auth/interface/decorator/roles.decorator';
+import { Role } from '@/modules/user/domain/format.enum';
+
 import { CreateDocumentDto } from '../application/dto/create-document.dto';
 import { UpdateDocumentDto } from '../application/dto/update-document.dto';
 import { DocumentService } from '../application/service/document.service';
@@ -25,11 +28,13 @@ export class DocumentController {
   }
 
   @Get()
+  @RoleProtected(Role.ADMIN)
   findAll(): Promise<Document[]> {
     return this.documentService.findAll();
   }
 
   @Get(':id')
+  @RoleProtected(Role.ADMIN)
   findOne(@Param('id') id: number): Promise<Document> {
     return this.documentService.findOne(id);
   }

@@ -10,12 +10,16 @@ import {
   Req,
 } from '@nestjs/common';
 
+import { RoleProtected } from '@/modules/auth/interface/decorator/roles.decorator';
+
 import { UpdateUserDto } from '../application/dto/update-user.dto';
 import { RequestWithUser } from '../application/repository/request-with-user-interface';
 import { UserService } from '../application/service/user.service';
+import { Role } from '../domain/format.enum';
 import { User } from '../domain/user.domain';
 
 @Controller('user')
+@RoleProtected(Role.ADMIN)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -25,6 +29,7 @@ export class UserController {
   }
 
   @Get('me')
+  @RoleProtected(Role.CLIENT)
   findMe(@Req() request: RequestWithUser): User {
     return request.user;
   }
