@@ -10,7 +10,7 @@ import {
   Post,
 } from '@nestjs/common';
 
-import { RoleProtected } from '@/modules/auth/interface/decorator/roles.decorator';
+import { RoleProtected } from '@/modules/auth/application/decorator/roles.decorator';
 import { Role } from '@/modules/user/domain/format.enum';
 
 import { CreateRentDto } from '../application/dto/create-rent.dto';

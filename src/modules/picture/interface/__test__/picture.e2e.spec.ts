@@ -8,7 +8,7 @@ import { loadFixtures } from '@data/util/loader';
 import { AppModule } from '@/app.module';
 import { FILE_UPLOAD_REPOSITORY } from '@/common/application/repository/file-upload.repository.interface';
 import { MockGuard } from '@/common/mock/jwt-auth-guard.mock';
-import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
+import { GlobalAuthGuard } from '@/modules/auth/application/guard/auth.guard';
 
 import { CarPicture } from '../../domain/car-picture.enum';
 

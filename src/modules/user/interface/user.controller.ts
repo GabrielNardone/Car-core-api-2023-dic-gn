@@ -10,7 +10,7 @@ import {
   Req,
 } from '@nestjs/common';
 
-import { RoleProtected } from '@/modules/auth/interface/decorator/roles.decorator';
+import { RoleProtected } from '@/modules/auth/application/decorator/roles.decorator';
 
 import { UpdateUserDto } from '../application/dto/update-user.dto';
 import { RequestWithUser } from '../application/repository/request-with-user-interface';

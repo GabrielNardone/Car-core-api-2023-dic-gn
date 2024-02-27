@@ -10,7 +10,7 @@ import { Role } from '@/modules/user/domain/format.enum';
 import { User } from '@/modules/user/domain/user.domain';
 
 import { IS_PUBLIC_KEY } from '../decorator/public-route.decorator';
-import { META_ROLES } from '../decorator/roles.decorator';
+import { ROLES_KEY } from '../decorator/roles.decorator';
 
 @Injectable()
 export class GlobalAuthGuard extends AuthGuard('jwt') {
@@ -24,19 +24,20 @@ export class GlobalAuthGuard extends AuthGuard('jwt') {
       IS_PUBLIC_KEY,
     );
 
-    const validRoles: Role[] = this.reflector.getAllAndMerge(META_ROLES, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-
     if (isPublicRoute) return true;
-    if (!validRoles || validRoles.length === 0) return true;
 
     try {
       await super.canActivate(context);
     } catch (error) {
       return false;
     }
+
+    const validRoles: Role[] = this.reflector.getAllAndMerge(ROLES_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
+    if (!validRoles || validRoles.length === 0) return true;
 
     const request = context.switchToHttp().getRequest();
     const user: User = request.user;

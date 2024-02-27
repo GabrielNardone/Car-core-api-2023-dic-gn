@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
-import { RoleProtected } from '@/modules/auth/interface/decorator/roles.decorator';
+import { RoleProtected } from '@/modules/auth/application/decorator/roles.decorator';
 import { Role } from '@/modules/user/domain/format.enum';
 
 import { CreatePictureDto } from '../application/dto/create-picture.dto';

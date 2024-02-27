@@ -7,7 +7,7 @@ import { loadFixtures } from '@data/util/loader';
 
 import { AppModule } from '@/app.module';
 import { MockGuard } from '@/common/mock/jwt-auth-guard.mock';
-import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
+import { GlobalAuthGuard } from '@/modules/auth/application/guard/auth.guard';
 
 import { CreateRentDto } from '../../application/dto/create-rent.dto';
 import { UpdateRentDto } from '../../application/dto/update-rent.dto';

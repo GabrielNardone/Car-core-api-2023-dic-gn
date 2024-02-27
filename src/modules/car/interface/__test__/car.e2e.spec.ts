@@ -7,7 +7,7 @@ import { loadFixtures } from '@data/util/loader';
 
 import { AppModule } from '@/app.module';
 import { MockGuard } from '@/common/mock/jwt-auth-guard.mock';
-import { GlobalAuthGuard } from '@/modules/auth/interface/guard/auth.guard';
+import { GlobalAuthGuard } from '@/modules/auth/application/guard/auth.guard';
 
 import { CreateCarDto } from '../../application/dto/create-car.dto';
 import { UpdateCarDto } from '../../application/dto/update-car.dto';
