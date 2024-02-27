@@ -8,6 +8,7 @@ items:
     address: 'Lugano 345'
     country: 'Argentina'
     externalId: '1234-1234-1234-1234'
+    role: 'client'
 
   user1:
     firstName: 'Hernán'
@@ -17,3 +18,4 @@ items:
     address: 'Caseros 345'
     country: 'Argentina'
     externalId: '1234-1234-1234-1234'
+    role: 'admin'

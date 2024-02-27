@@ -10,12 +10,16 @@ import {
   Post,
 } from '@nestjs/common';
 
+import { RoleProtected } from '@/modules/auth/application/decorator/roles.decorator';
+import { Role } from '@/modules/user/domain/format.enum';
+
 import { CreateRentDto } from '../application/dto/create-rent.dto';
 import { UpdateRentDto } from '../application/dto/update-rent.dto';
 import { RentService } from '../application/service/rent.service';
 import { Rent } from '../domain/rent.domain';
 
 @Controller('rent')
+@RoleProtected(Role.ADMIN)
 export class RentController {
   constructor(private readonly rentService: RentService) {}
 
