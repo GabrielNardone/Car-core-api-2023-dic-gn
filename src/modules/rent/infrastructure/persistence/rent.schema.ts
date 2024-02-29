@@ -12,6 +12,7 @@ export const RentSchema = new EntitySchema<Rent>({
     acceptedDate: {
       name: 'accepted_date',
       type: 'date',
+      nullable: true,
     },
     pricePerDay: {
       name: 'price_per_day',

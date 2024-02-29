@@ -19,7 +19,6 @@ import { RentService } from '../application/service/rent.service';
 import { Rent } from '../domain/rent.domain';
 
 @Controller('rent')
-@RoleProtected(Role.ADMIN)
 export class RentController {
   constructor(private readonly rentService: RentService) {}
 
@@ -29,6 +28,7 @@ export class RentController {
   }
 
   @Get()
+  @RoleProtected(Role.ADMIN)
   findAll(): Promise<Rent[]> {
     return this.rentService.findAll();
   }
@@ -40,6 +40,7 @@ export class RentController {
 
   @HttpCode(HttpStatus.ACCEPTED)
   @Patch(':id')
+  @RoleProtected(Role.ADMIN)
   update(
     @Param('id') id: number,
     @Body() updateRentDto: UpdateRentDto,

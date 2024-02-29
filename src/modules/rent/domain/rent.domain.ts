@@ -4,12 +4,12 @@ import { User } from '@/modules/user/domain/user.domain';
 
 export class Rent extends Base {
   car: Car;
-  pricePerDay: number;
   user: User;
   admin: User;
-  acceptedDate: Date;
-  rejected: boolean;
+  pricePerDay: number;
   startingDate: Date;
   dueDate: Date;
   endDate: Date;
+  rejected: boolean;
+  acceptedDate?: Date;
 }

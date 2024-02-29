@@ -9,11 +9,11 @@ export class RentMapper {
   fromDtoToEntity(rent: CreateRentDto | UpdateRentDto) {
     const newRent = new Rent();
     newRent.pricePerDay = rent.pricePerDay;
-    newRent.acceptedDate = rent.acceptedDate;
     newRent.startingDate = rent.startingDate;
     newRent.dueDate = rent.dueDate;
     newRent.endDate = rent.endDate;
     newRent.rejected = rent.rejected;
+    newRent.acceptedDate = rent?.acceptedDate;
 
     return newRent;
   }
